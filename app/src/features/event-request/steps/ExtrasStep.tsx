@@ -47,7 +47,7 @@ export function ExtrasStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext}>
-      <h1 className="display-xl text-4xl md:text-5xl mb-8">{t('steps.extras.title')}</h1>
+      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.extras.title')}</h1>
       <ToggleGroup title={t('steps.extras.gastro')} path="gastro" keys={GASTRO_KEYS} labelPrefix="steps.extras" />
       <ToggleGroup title={t('steps.extras.rooms')} path="rooms" keys={ROOM_KEYS} labelPrefix="steps.extras" />
       <ToggleGroup title={t('steps.extras.otherExtras')} path="extras" keys={EXTRA_KEYS} labelPrefix="steps.extras" />

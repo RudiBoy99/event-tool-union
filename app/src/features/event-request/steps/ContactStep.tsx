@@ -18,7 +18,7 @@ export function ContactStep({ step, onBack, onNext }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={handleNext}>
-      <h1 className="display-xl text-4xl md:text-5xl mb-8">
+      <h1 className="display-xl text-2xl md:text-3xl mb-6">
         {t('steps.contact.title').split(' ').slice(0, -1).join(' ')}{' '}
         <span className="text-[var(--color-brand)]">
           {t('steps.contact.title').split(' ').slice(-1)}

@@ -15,7 +15,7 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={!selected}>
-      <h1 className="display-xl text-4xl md:text-5xl mb-8">{t('steps.eventType.title')}</h1>
+      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.eventType.title')}</h1>
       <Controller
         name="eventType"
         control={control}

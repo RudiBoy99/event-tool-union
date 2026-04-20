@@ -17,7 +17,7 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onSubmit} nextLabel={t('nav.submit')}>
-      <h1 className="display-xl text-4xl md:text-5xl mb-8">{t('steps.review.title')}</h1>
+      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.review.title')}</h1>
 
       <div className="space-y-5 mb-8 text-sm">
         <Row label={t('steps.contact.title')} value={`${data.contact.name} · ${data.contact.email}`} />

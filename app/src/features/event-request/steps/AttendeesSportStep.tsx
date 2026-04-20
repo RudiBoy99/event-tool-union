@@ -50,7 +50,7 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={(sports?.length ?? 0) === 0}>
-      <h1 className="display-xl text-4xl md:text-5xl mb-8">{t('steps.attendees.title')}</h1>
+      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.attendees.title')}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
         <div>
