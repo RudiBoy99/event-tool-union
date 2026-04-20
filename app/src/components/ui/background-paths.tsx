@@ -12,7 +12,7 @@ function FloatingPaths({ position }: { position: number }) {
     } ${343 - i * 6}C${616 - i * 5 * position} ${470 - i * 6} ${
       684 - i * 5 * position
     } ${875 - i * 6} ${684 - i * 5 * position} ${875 - i * 6}`,
-    width: 0.7 + i * 0.035,
+    width: 0.55 + i * 0.028,
   }))
 
   return (
@@ -30,11 +30,11 @@ function FloatingPaths({ position }: { position: number }) {
             d={path.d}
             stroke="#FF6B1A"
             strokeWidth={path.width}
-            strokeOpacity={0.13 + path.id * 0.016}
-            initial={{ pathLength: 0.3, opacity: 0.6 }}
+            strokeOpacity={0.09 + path.id * 0.013}
+            initial={{ pathLength: 0.3, opacity: 0.5 }}
             animate={{
               pathLength: 1,
-              opacity: [0.4, 0.78, 0.4],
+              opacity: [0.28, 0.58, 0.28],
               pathOffset: [0, 1, 0],
             }}
             transition={{
@@ -57,14 +57,14 @@ export function BackgroundPaths({ intensity = "full" }: BackgroundPathsProps) {
   return (
     <div
       className="absolute inset-0 overflow-hidden"
-      style={{ opacity: intensity === "muted" ? 0.72 : 1 }}
+      style={{ opacity: intensity === "muted" ? 0.58 : 1 }}
     >
       <FloatingPaths position={1} />
       <FloatingPaths position={-1} />
       {/* Orange radial glow, top-right */}
       <div
         className="absolute -top-[20%] -right-[10%] w-[55%] h-[85%] pointer-events-none"
-        style={{ background: "radial-gradient(circle, rgba(255,107,26,0.38) 0%, transparent 65%)" }}
+        style={{ background: "radial-gradient(circle, rgba(255,107,26,0.26) 0%, transparent 65%)" }}
       />
     </div>
   )

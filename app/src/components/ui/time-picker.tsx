@@ -28,7 +28,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
       <Clock className="h-4 w-4 text-[var(--color-brand)] shrink-0" />
 
       <Select value={h} onValueChange={setHour} disabled={disabled}>
-        <SelectTrigger className="h-10 w-[78px] bg-white/[0.04] border-white/10 text-white [&>span]:text-white">
+        <SelectTrigger className="h-11 w-[86px] bg-white/[0.04] border-white/10 text-white text-sm [&>span]:text-white">
           <SelectValue placeholder="HH" />
         </SelectTrigger>
         <SelectContent className="bg-[#141414] border-white/10 text-white max-h-[240px]">
@@ -43,7 +43,7 @@ export function TimePicker({ value, onChange, disabled }: TimePickerProps) {
       <span className="text-white/60 font-bold">:</span>
 
       <Select value={m} onValueChange={setMinute} disabled={disabled}>
-        <SelectTrigger className="h-10 w-[78px] bg-white/[0.04] border-white/10 text-white [&>span]:text-white">
+        <SelectTrigger className="h-11 w-[86px] bg-white/[0.04] border-white/10 text-white text-sm [&>span]:text-white">
           <SelectValue placeholder="MM" />
         </SelectTrigger>
         <SelectContent className="bg-[#141414] border-white/10 text-white">

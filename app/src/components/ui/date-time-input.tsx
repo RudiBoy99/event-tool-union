@@ -39,7 +39,7 @@ export function DateTimeInput({
             <button
               type="button"
               className={cn(
-                "flex items-center gap-2 w-full h-10 px-3 text-sm text-left rounded-md border border-white/10 bg-white/[0.04] text-white hover:border-white/20 hover:bg-white/[0.06] transition-colors",
+                "flex items-center gap-2 w-full h-11 px-3.5 text-sm text-left rounded-md border border-white/10 bg-white/[0.04] text-white hover:border-white/20 hover:bg-white/[0.06] transition-colors",
                 !date && "text-white/50"
               )}
             >
@@ -63,7 +63,7 @@ export function DateTimeInput({
       {/* Time */}
       <div className="flex flex-col gap-1.5">
         <label className="label-caps">{timeLabel}</label>
-        <div className="h-10 flex items-center">
+        <div className="h-11 flex items-center">
           <TimePicker value={time} onChange={onTimeChange} />
         </div>
       </div>

@@ -109,7 +109,7 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
                 setValue('dateTime.durationMinutes', Math.round(h * 60))
               }
             }}
-            className="w-[84px] bg-transparent pl-4 pr-1 py-2 text-sm font-semibold text-white placeholder:text-white/40 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-[96px] h-11 bg-transparent pl-4 pr-1 text-base font-semibold text-white placeholder:text-white/40 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
           <span className="pr-4 text-xs text-white/60">h</span>
         </div>
