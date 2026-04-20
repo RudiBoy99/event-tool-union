@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import type { EventRequestData } from '../schema'
 import { StepShell } from '../components/StepShell'
 import { AvailabilityBadge } from '../components/AvailabilityBadge'
@@ -33,6 +33,9 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
   const date = watch('dateTime.date')
   const startTime = watch('dateTime.startTime')
   const duration = watch('dateTime.durationMinutes')
+  const [durationInput, setDurationInput] = useState<string>(() =>
+    duration > 0 ? String(duration / 60) : '',
+  )
 
   const sportFamily = useMemo(() => {
     const loc = LOCATIONS[location]
@@ -92,11 +95,19 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
             min="0.5"
             max="24"
             inputMode="decimal"
-            value={duration > 0 ? String(duration / 60) : ''}
+            value={durationInput}
             placeholder={t('steps.date.customPlaceholder')}
             onChange={(e) => {
-              const h = Number(e.target.value)
-              if (h > 0 && h <= 24) setValue('dateTime.durationMinutes', Math.round(h * 60))
+              const v = e.target.value
+              setDurationInput(v)
+              if (v === '') {
+                setValue('dateTime.durationMinutes', 0)
+                return
+              }
+              const h = Number(v)
+              if (!isNaN(h) && h >= 0.5 && h <= 24) {
+                setValue('dateTime.durationMinutes', Math.round(h * 60))
+              }
             }}
             className="w-[84px] bg-transparent pl-4 pr-1 py-2 text-sm font-semibold text-white placeholder:text-white/40 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
