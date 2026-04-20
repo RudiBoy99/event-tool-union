@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# System
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Brainstorm artifacts (Visual Companion)
+.superpowers/
+
+# Worktrees
+.worktrees/
+
+# Environment
+.env
+.env.local
+*.log

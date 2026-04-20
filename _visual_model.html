@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Union Sport — Event-Tool Architektur</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap');
+
+@page { size: A3 landscape; margin: 10mm; }
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#fafbfc;color:#1a1a2e;font-family:'IBM Plex Sans',system-ui,sans-serif;padding:14px 12px}
+.page{max-width:1500px;margin:0 auto}
+
+/* ─── Page-Break Control ─────────────────────────────────────── */
+/* Niemals mitten im Element umbrechen */
+.phase,
+.col,
+.box,
+.tool,
+.stats,
+.legend,
+.row{
+  page-break-inside:avoid !important;
+  break-inside:avoid !important;
+}
+/* Zwischen ganzen Sektionen darf gebrochen werden */
+.col.w-full{
+  page-break-after:auto;
+  break-after:auto;
+}
+/* Sektionen die unbedingt zusammen bleiben müssen */
+.stats,.legend{
+  page-break-before:avoid;
+  break-before:avoid;
+}
+
+:root{
+  /* Phase colors — alle Pastell + dunkle Text/Border Variante */
+  --landing:#dbeafe;--landing-b:#93c5fd;--landing-t:#1e40af;
+  --form:#f0e6ff;--form-b:#c084fc;--form-t:#7c3aed;
+  --backend:#dcfce7;--backend-b:#86efac;--backend-t:#166534;
+  --data:#fef3c7;--data-b:#fcd34d;--data-t:#92400e;
+  --output:#fee2e2;--output-b:#fca5a5;--output-t:#991b1b;
+  --admin:#f3e8ff;--admin-b:#c4b5fd;--admin-t:#5b21b6;
+  --partner:#fff1f2;--partner-b:#fda4af;--partner-t:#be123c;
+  --tech:#eff6ff;--tech-b:#93c5fd;--tech-t:#1d4ed8;
+  --sys:#f1f5f9;--sys-b:#cbd5e1;--sys-t:#475569;
+}
+
+/* Shared box */
+.box{border-radius:10px;padding:12px 16px;text-align:center;position:relative;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.box-title{font-weight:700;font-size:14px;margin-bottom:2px}
+.box-sub{font-size:10px;opacity:.7;font-family:'IBM Plex Mono',monospace}
+.box-detail{font-size:9px;opacity:.55;margin-top:3px}
+
+/* Phase container */
+.phase{border-radius:12px;padding:16px 14px 14px;width:100%;border:2px solid;position:relative}
+.phase-label{position:absolute;top:-10px;left:20px;font-size:9px;font-weight:700;letter-spacing:2px;padding:2px 10px;border-radius:4px;color:white}
+.phase-desc{margin-top:4px;font-size:10px;text-align:center;margin-bottom:10px;font-weight:500}
+
+/* Tool / card */
+.tools{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.tool{border-radius:8px;padding:10px 12px;text-align:center;min-width:130px;flex:1;max-width:180px;background:white}
+.tool-name{font-weight:700;font-size:13px}
+.tool-what{font-size:8px;font-family:'IBM Plex Mono';opacity:.6;margin-top:2px}
+.tool-num{position:absolute;top:-6px;left:-6px;width:18px;height:18px;border-radius:50%;background:white;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid}
+.tool-status{font-size:7px;font-weight:600;margin-top:4px;opacity:.75}
+.tool-star{position:absolute;top:-4px;right:-4px;width:18px;height:18px;border-radius:50%;background:#fcd34d;color:#92400e;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fde68a}
+
+/* Arrow */
+.arrow{display:flex;flex-direction:column;align-items:center;padding:4px 0}
+.arrow .line{width:2px;height:18px;background:#cbd5e1}
+.arrow .head{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:7px solid #cbd5e1}
+.arrow.c .line{background:var(--c)}.arrow.c .head{border-top-color:var(--c)}
+.arrow-label{font-size:8px;color:#94a3b8;letter-spacing:1.5px;font-weight:700;margin:2px 0}
+
+/* Row helpers */
+.row{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap}
+.col{display:flex;flex-direction:column;align-items:center}
+.w-full{width:100%}
+.divider{width:2px;height:60px;background:#e2e8f0;border-radius:1px}
+
+/* Big title */
+.big-title{font-size:15px;font-weight:700}
+.accent-bar{height:3px;border-radius:2px;margin:8px 0}
+
+/* Feature list */
+.feats{display:flex;flex-direction:column;gap:2px;margin-top:6px;text-align:left}
+.feat{font-size:9px;display:flex;align-items:center;gap:5px}
+.feat::before{content:'→';font-weight:700}
+
+/* Tags */
+.tags{display:flex;gap:5px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+.tag{font-size:9px;font-weight:600;padding:3px 10px;border-radius:5px}
+
+/* Stats */
+.stats{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
+.stat{flex:1;min-width:110px;background:white;border-radius:8px;border:2px solid;padding:10px;text-align:center}
+.stat-val{font-weight:800;font-size:22px}
+.stat-label{font-size:7px;letter-spacing:1.5px;font-weight:600;margin-top:2px;opacity:.6}
+
+/* Legend */
+.legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;padding:10px 16px;background:#f1f5f9;border-radius:8px;margin-top:16px}
+.legend-item{display:flex;align-items:center;gap:6px;font-size:10px}
+.legend-dot{width:12px;height:12px;border-radius:3px;border:2px solid}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- TITLE -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div style="text-align:center;margin-bottom:18px">
+  <div style="font-size:24px;font-weight:700;letter-spacing:.5px">Union Sport — Event-Tool Architektur</div>
+  <div style="font-size:11px;color:#94a3b8;margin-top:3px;font-family:'IBM Plex Mono'">
+    3 Landing-Pages · 7 Form-Sektionen · 4 Backend-Services · 3 Data-Collections · Wix Studio · React + TypeScript
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- USER LAYER -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="row" style="margin-bottom:4px;gap:16px">
+  <div class="box" style="background:#dbeafe;border:2px solid #93c5fd;flex:1">
+    <div class="box-title" style="color:#1e40af">👤 Kunde / Interessent</div>
+    <div class="box-sub" style="color:#1e40af">Privatperson oder Firma · 10-120 Personen</div>
+    <div class="box-detail">Öffnet union-sport.ch/events/...</div>
+  </div>
+  <div class="box" style="background:#fee2e2;border:2px solid #fca5a5;flex:1.2">
+    <div class="box-title" style="color:#991b1b">🏢 union-sport.ch · Wix Studio</div>
+    <div class="box-sub" style="color:#991b1b">Production-Website · React + TypeScript · Wix CLI</div>
+    <div class="box-detail">Staging + Production · Git-Versionierung · DE / EN</div>
+  </div>
+  <div class="box" style="background:#f3e8ff;border:2px solid #c4b5fd;flex:1">
+    <div class="box-title" style="color:#5b21b6">🎯 Union-Sport Team</div>
+    <div class="box-sub" style="color:#5b21b6">Triage · Offerte · Durchführung</div>
+    <div class="box-detail">events@union-sport.ch · Wix Dashboard</div>
+  </div>
+</div>
+
+<div class="arrow c" style="--c:#fca5a5"><div class="line"></div><div class="head"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- PHASE 01: CUSTOMER JOURNEY -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="col w-full">
+  <div class="phase" style="background:var(--landing);border-color:var(--landing-b)">
+    <div class="phase-label" style="background:var(--landing-t)">PHASE 01 — CUSTOMER JOURNEY</div>
+    <div class="phase-desc" style="color:var(--landing-t)">3 dedizierte Landing-Pages · Zielgruppen-spezifische Hero + Content · Gemeinsame Form-Komponente</div>
+    <div class="tools">
+      <div class="tool" style="border:2px solid var(--landing-b);position:relative">
+        <div class="tool-name" style="color:var(--landing-t)">🏢 Firmenevent</div>
+        <div class="tool-what">/events/firmenevent</div>
+        <div class="tool-status" style="color:var(--landing-t)">20-100 Personen · Teambuilding · Kickoff</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--landing-b);position:relative">
+        <div class="tool-name" style="color:var(--landing-t)">🎉 Privatevent</div>
+        <div class="tool-what">/events/privatevent</div>
+        <div class="tool-status" style="color:var(--landing-t)">10-30 Personen · Geburtstag · Familienfeier</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--landing-b);position:relative">
+        <div class="tool-name" style="color:var(--landing-t)">🎓 Schulevent</div>
+        <div class="tool-what">/events/schulevent</div>
+        <div class="tool-status" style="color:var(--landing-t)">flexibel · Sporttag · Projektwoche</div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow c" style="--c:var(--form-b)"><div class="line"></div><div class="arrow-label">KUNDE STARTET KONFIGURATION</div><div class="head"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- PHASE 02: FORM CONFIGURATION -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="col w-full">
+  <div class="phase" style="background:var(--form);border-color:var(--form-b)">
+    <div class="phase-label" style="background:var(--form-t)">PHASE 02 — FORM CONFIGURATION</div>
+    <div class="phase-desc" style="color:var(--form-t)">7 Sektionen · Conditional Logic · „ab CHF"-Anker · Empfehlungs-Toggle (★) in Sektionen 2, 4, 6 · Interesse-Erfassung, keine Buchung</div>
+    <div class="tools">
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">1</div>
+        <div class="tool-name" style="color:var(--form-t)">Event-Basics</div>
+        <div class="tool-what">Datum · Zeit · Dauer</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">2</div>
+        <div class="tool-star">★</div>
+        <div class="tool-name" style="color:var(--form-t)">Location &amp; Sport</div>
+        <div class="tool-what">Standort → gefilterter Sport → Courts</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">3</div>
+        <div class="tool-name" style="color:var(--form-t)">Personen &amp; Level</div>
+        <div class="tool-what">Anzahl · Alter · Sport-Level</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">4</div>
+        <div class="tool-star">★</div>
+        <div class="tool-name" style="color:var(--form-t)">Sport-Extras</div>
+        <div class="tool-what">Coaching · Equipment · Turnier</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">5</div>
+        <div class="tool-name" style="color:var(--form-t)">Verpflegung</div>
+        <div class="tool-what">Apéro · Foodtruck (Partner)</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">6</div>
+        <div class="tool-star">★</div>
+        <div class="tool-name" style="color:var(--form-t)">Räume &amp; Specials</div>
+        <div class="tool-what">Lounge · DJ · Sachpreise · Gutscheine</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--form-b);position:relative">
+        <div class="tool-num" style="color:var(--form-t);border-color:var(--form-b)">7</div>
+        <div class="tool-name" style="color:var(--form-t)">Kontakt</div>
+        <div class="tool-what">Name · Firma · Meeting-Wunsch</div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow c" style="--c:var(--backend-b)"><div class="line"></div><div class="arrow-label">POST /submitEventRequest · JSON PAYLOAD</div><div class="head"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- PHASE 03: BACKEND PROCESSING -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="col w-full">
+  <div class="phase" style="background:var(--backend);border-color:var(--backend-b)">
+    <div class="phase-label" style="background:var(--backend-t)">PHASE 03 — BACKEND PROCESSING</div>
+    <div class="phase-desc" style="color:var(--backend-t)">Backend-Pipeline läuft in 5-10 Sekunden · Wix Velo Service Plugins · Serverseitige Validierung</div>
+    <div class="tools">
+      <div class="tool" style="border:2px solid var(--backend-b);position:relative">
+        <div class="tool-num" style="color:var(--backend-t);border-color:var(--backend-b)">1</div>
+        <div class="tool-name" style="color:var(--backend-t)">submitEventRequest</div>
+        <div class="tool-what">Backend Endpoint</div>
+        <div class="tool-status" style="color:var(--backend-t)">Validate · Save · Trigger Pipeline</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--backend-b);position:relative">
+        <div class="tool-num" style="color:var(--backend-t);border-color:var(--backend-b)">2</div>
+        <div class="tool-name" style="color:var(--backend-t)">Calculation Engine</div>
+        <div class="tool-what">Service Plugin</div>
+        <div class="tool-status" style="color:var(--backend-t)">Lädt PriceConfig · Baut CostBreakdown</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--backend-b);position:relative">
+        <div class="tool-num" style="color:var(--backend-t);border-color:var(--backend-b)">3</div>
+        <div class="tool-name" style="color:var(--backend-t)">PDF Generator</div>
+        <div class="tool-what">PDFmonkey API</div>
+        <div class="tool-status" style="color:var(--backend-t)">Kunden-PDF + Interne-Kalk-PDF</div>
+      </div>
+      <div class="tool" style="border:2px solid var(--backend-b);position:relative">
+        <div class="tool-num" style="color:var(--backend-t);border-color:var(--backend-b)">4</div>
+        <div class="tool-name" style="color:var(--backend-t)">Mail Dispatcher</div>
+        <div class="tool-what">Triggered Email · SendGrid</div>
+        <div class="tool-status" style="color:var(--backend-t)">2 Mails · Kunde + Team</div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow c" style="--c:var(--data-b)"><div class="line"></div><div class="arrow-label">READ · WRITE · PERSIST</div><div class="head"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- PHASE 04: DATA PERSISTENCE -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="col w-full">
+  <div class="phase" style="background:var(--data);border-color:var(--data-b)">
+    <div class="phase-label" style="background:var(--data-t)">PHASE 04 — DATA PERSISTENCE</div>
+    <div class="phase-desc" style="color:var(--data-t)">Wix Data Collections · Admin-verwaltbar über Dashboard-Page · Versionierung durch Wix-History</div>
+    <div class="tools">
+      <div class="tool" style="border:2px solid var(--data-b);position:relative;min-width:220px;max-width:260px">
+        <div class="tool-name" style="color:var(--data-t)">📋 Partners</div>
+        <div class="tool-what">Collection · Admin-editierbar</div>
+        <div class="tool-status" style="color:var(--data-t)">
+          id · name · category · logo<br>
+          priceAnchor · status · Beschreibung<br>
+          [Vito · Acento · Luen · Gelateria · DJ]
+        </div>
+      </div>
+      <div class="tool" style="border:2px solid var(--data-b);position:relative;min-width:220px;max-width:260px">
+        <div class="tool-name" style="color:var(--data-t)">💰 PriceConfig</div>
+        <div class="tool-what">Collection · JSON-Field</div>
+        <div class="tool-status" style="color:var(--data-t)">
+          courts · coaching · equipment<br>
+          tournament · food · rooms · prizes<br>
+          [Von Union Sport geliefert in W6]
+        </div>
+      </div>
+      <div class="tool" style="border:2px solid var(--data-b);position:relative;min-width:220px;max-width:260px">
+        <div class="tool-name" style="color:var(--data-t)">📥 Submissions</div>
+        <div class="tool-what">Collection · Historie + Inbox</div>
+        <div class="tool-status" style="color:var(--data-t)">
+          payload · eventType · location<br>
+          customerPdfUrl · internalPdfUrl<br>
+          status: new → done (6 Stufen)
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow c" style="--c:var(--output-b)"><div class="line"></div><div class="arrow-label">2 MAILS · 2 PDFs · ASYMMETRISCHES PREISMODELL</div><div class="head"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- PHASE 05: OUTPUT & NOTIFICATION -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="col w-full">
+  <div class="phase" style="background:var(--output);border-color:var(--output-b)">
+    <div class="phase-label" style="background:var(--output-t)">PHASE 05 — OUTPUT &amp; NOTIFICATION</div>
+    <div class="phase-desc" style="color:var(--output-t)">Zwei PDFs, zwei Adressaten, zwei Informationsebenen · Kunde sieht Anker, Team sieht Totale</div>
+    <div style="display:flex;gap:14px">
+      <div class="tool" style="border:2px solid var(--output-b);flex:1;min-width:280px">
+        <div class="tool-name" style="color:var(--output-t)">📧 Mail 1 → Kunde</div>
+        <div class="tool-what">Thank-You · Automatisch · DE oder EN</div>
+        <div class="feats" style="padding:6px 0 0 14px">
+          <div class="feat" style="color:var(--output-t)">Kunden-PDF (Zusammenfassung der Anfrage)</div>
+          <div class="feat" style="color:var(--output-t)">Hinweis: Antwort innert 24 Stunden</div>
+          <div class="feat" style="color:var(--output-t)">KEINE Preise · KEINE Offerte</div>
+          <div class="feat" style="color:var(--output-t)">Kontakt-Fallback: Telefon + Mail</div>
+        </div>
+      </div>
+      <div class="divider"></div>
+      <div class="tool" style="border:2px solid var(--output-b);flex:1;min-width:280px">
+        <div class="tool-name" style="color:var(--output-t)">📬 Mail 2 → events@union-sport.ch</div>
+        <div class="tool-what">Interne Triage · Union-Sport Team</div>
+        <div class="feats" style="padding:6px 0 0 14px">
+          <div class="feat" style="color:var(--output-t)">Kunden-PDF (wie Mail 1)</div>
+          <div class="feat" style="color:var(--output-t)">Interne Kalkulations-PDF mit Totalen</div>
+          <div class="feat" style="color:var(--output-t)">Marge-Puffer-Hinweis (+15-25 %)</div>
+          <div class="feat" style="color:var(--output-t)">„Nicht sicher"-Felder ROT markiert (= Beratung nötig)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow"><div class="line"></div><div class="arrow-label">PARTNER-ÖKOSYSTEM &amp; TECH-STACK</div><div class="head"></div></div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- ENGINE / PARTNER LAYER -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div style="text-align:center;margin-bottom:8px;margin-top:4px">
+  <span style="font-size:8px;font-weight:700;letter-spacing:2px;color:var(--partner-t);background:var(--partner);padding:3px 12px;border-radius:4px;border:1px dashed var(--partner-b)">⚡ PARTNER-ÖKOSYSTEM &amp; ENGINE LAYER</span>
+</div>
+
+<div class="row" style="gap:14px;margin-bottom:4px;align-items:stretch">
+  <!-- Partners -->
+  <div class="box" style="background:var(--partner);border:2px solid var(--partner-b);flex:1.2">
+    <div class="big-title" style="color:var(--partner-t)">🤝 Partner-Ökosystem</div>
+    <div class="box-sub" style="color:var(--partner-t)">5 Kandidaten in Abklärung · Launch mit ≥2 bestätigten</div>
+    <div class="feats">
+      <div class="feat" style="color:var(--partner-t)">🍕 Vito Pizzeria — Foodtruck italienisch</div>
+      <div class="feat" style="color:var(--partner-t)">🥟 Acento Argentina — Foodtruck südamerikanisch</div>
+      <div class="feat" style="color:var(--partner-t)">🥐 Luen Bakery — Apéro + Snacks</div>
+      <div class="feat" style="color:var(--partner-t)">🍦 Gelateria di Berna — Dessert-Truck</div>
+      <div class="feat" style="color:var(--partner-t)">🎧 DJ — in Gesprächen</div>
+    </div>
+  </div>
+
+  <!-- Calc Engine -->
+  <div class="box" style="background:var(--backend);border:2px solid var(--backend-b);min-width:200px">
+    <div style="font-size:24px;margin-bottom:4px">⚙️</div>
+    <div class="big-title" style="color:var(--backend-t)">Calculation Engine</div>
+    <div class="box-sub" style="color:var(--backend-t)">TypeScript · Service Plugin</div>
+    <div class="feats">
+      <div class="feat" style="color:var(--backend-t)">PriceConfig (JSON) parser</div>
+      <div class="feat" style="color:var(--backend-t)">Item-Level Kostenberechnung</div>
+      <div class="feat" style="color:var(--backend-t)">Marge-Puffer-Hinweis</div>
+      <div class="feat" style="color:var(--backend-t)">Nicht-sicher-Erkennung</div>
+      <div class="feat" style="color:var(--backend-t)">config-driven — kein Code-Deploy</div>
+    </div>
+  </div>
+
+  <!-- Wix Studio -->
+  <div class="box" style="background:var(--tech);border:2px solid var(--tech-b);min-width:200px">
+    <div style="font-size:24px;margin-bottom:4px">🧱</div>
+    <div class="big-title" style="color:var(--tech-t)">Wix Studio</div>
+    <div class="box-sub" style="color:var(--tech-t)">Platform · wix-cli</div>
+    <div class="accent-bar" style="background:linear-gradient(90deg,#3b82f6,#8b5cf6)"></div>
+    <div style="font-size:9px;color:var(--tech-t);text-align:left">
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>Stack</span><strong>React+TS</strong></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>Dev</span><strong>VS Code + Git</strong></div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:2px"><span>Deploy</span><strong>wix deploy</strong></div>
+      <div style="display:flex;justify-content:space-between"><span>Envs</span><strong>Staging + Prod</strong></div>
+    </div>
+  </div>
+
+  <!-- Admin Dashboard -->
+  <div class="box" style="background:var(--admin);border:2px solid var(--admin-b);flex:1.2">
+    <div class="big-title" style="color:var(--admin-t)">🛠️ Admin Dashboard</div>
+    <div class="box-sub" style="color:var(--admin-t)">Wix Dashboard Page · Union-Sport Team</div>
+    <div class="feats">
+      <div class="feat" style="color:var(--admin-t)">Partner-Manager (Logo, Preis, Status-Toggle)</div>
+      <div class="feat" style="color:var(--admin-t)">Preis-Editor (JSON, versioniert)</div>
+      <div class="feat" style="color:var(--admin-t)">Submissions-Inbox mit Status-Workflow</div>
+      <div class="feat" style="color:var(--admin-t)">Rollen &amp; Zugriff via Wix Members</div>
+      <div class="feat" style="color:var(--admin-t)">Keine Entwickler nötig für Updates</div>
+    </div>
+  </div>
+</div>
+
+<div class="arrow"><div class="line"></div><div class="head"></div></div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- INFRASTRUCTURE & TIMELINE -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div style="text-align:center;margin-bottom:8px">
+  <span style="font-size:8px;font-weight:700;letter-spacing:2px;color:var(--sys-t);background:var(--sys);padding:3px 12px;border-radius:4px;border:1px solid var(--sys-b)">🔧 INFRASTRUCTURE &amp; TIMELINE</span>
+</div>
+
+<div class="row" style="gap:10px;margin-bottom:10px">
+  <div class="box" style="background:var(--sys);border:1px solid var(--sys-b);flex:1">
+    <div style="font-size:14px">🗂️</div>
+    <div class="box-title" style="font-size:12px">Git Repository</div>
+    <div class="box-sub">GitHub · Feature-Branches</div>
+    <div class="box-detail">Version Control · Reviews</div>
+  </div>
+  <div class="box" style="background:var(--sys);border:1px solid var(--sys-b);flex:1">
+    <div style="font-size:14px">📄</div>
+    <div class="box-title" style="font-size:12px">PDFmonkey API</div>
+    <div class="box-sub">External Service · HTTPS</div>
+    <div class="box-detail">Free-Tier 50 PDFs/Monat</div>
+  </div>
+  <div class="box" style="background:var(--sys);border:1px solid var(--sys-b);flex:1">
+    <div style="font-size:14px">📮</div>
+    <div class="box-title" style="font-size:12px">SendGrid</div>
+    <div class="box-sub">Mail Delivery · Free-Tier</div>
+    <div class="box-detail">100 Mails/Tag kostenlos</div>
+  </div>
+  <div class="box" style="background:var(--sys);border:1px solid var(--sys-b);flex:1">
+    <div style="font-size:14px">🔒</div>
+    <div class="box-title" style="font-size:12px">hCaptcha</div>
+    <div class="box-sub">Anti-Spam · DSGVO-konform</div>
+    <div class="box-detail">EU-basiert</div>
+  </div>
+  <div class="box" style="background:var(--sys);border:1px solid var(--sys-b);flex:1">
+    <div style="font-size:14px">🇩🇪🇬🇧</div>
+    <div class="box-title" style="font-size:12px">i18n</div>
+    <div class="box-sub">DE + EN · React-intl</div>
+    <div class="box-detail">Dynamisches Switch</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- STATS BAR -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="stats">
+  <div class="stat" style="border-color:var(--landing-b)">
+    <div class="stat-val" style="color:var(--landing-t)">3</div>
+    <div class="stat-label" style="color:var(--landing-t)">LANDING PAGES</div>
+  </div>
+  <div class="stat" style="border-color:var(--form-b)">
+    <div class="stat-val" style="color:var(--form-t)">7</div>
+    <div class="stat-label" style="color:var(--form-t)">FORM-SEKTIONEN</div>
+  </div>
+  <div class="stat" style="border-color:var(--backend-b)">
+    <div class="stat-val" style="color:var(--backend-t)">4</div>
+    <div class="stat-label" style="color:var(--backend-t)">BACKEND SERVICES</div>
+  </div>
+  <div class="stat" style="border-color:var(--data-b)">
+    <div class="stat-val" style="color:var(--data-t)">3</div>
+    <div class="stat-label" style="color:var(--data-t)">DATA COLLECTIONS</div>
+  </div>
+  <div class="stat" style="border-color:var(--partner-b)">
+    <div class="stat-val" style="color:var(--partner-t)">5</div>
+    <div class="stat-label" style="color:var(--partner-t)">PARTNER PENDING</div>
+  </div>
+  <div class="stat" style="border-color:var(--tech-b)">
+    <div class="stat-val" style="color:var(--tech-t)">2</div>
+    <div class="stat-label" style="color:var(--tech-t)">SPRACHEN</div>
+  </div>
+  <div class="stat" style="border-color:var(--output-b)">
+    <div class="stat-val" style="color:var(--output-t)">&lt;24h</div>
+    <div class="stat-label" style="color:var(--output-t)">ANTWORTZEIT</div>
+  </div>
+  <div class="stat" style="border-color:var(--admin-b)">
+    <div class="stat-val" style="color:var(--admin-t)">6-8</div>
+    <div class="stat-label" style="color:var(--admin-t)">WOCHEN BIS LAUNCH</div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<!-- LEGEND -->
+<!-- ══════════════════════════════════════════════════════════════════════ -->
+<div class="legend">
+  <div class="legend-item"><div class="legend-dot" style="background:var(--landing);border-color:var(--landing-b)"></div><span>Customer Journey</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--form);border-color:var(--form-b)"></div><span>Form Configuration</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--backend);border-color:var(--backend-b)"></div><span>Backend Processing</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--data);border-color:var(--data-b)"></div><span>Data Persistence</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--output);border-color:var(--output-b)"></div><span>Output &amp; Notification</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--partner);border-color:var(--partner-b)"></div><span>Partner-Ökosystem</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--admin);border-color:var(--admin-b)"></div><span>Admin Dashboard</span></div>
+  <div class="legend-item"><div class="legend-dot" style="background:var(--tech);border-color:var(--tech-b)"></div><span>Tech Stack</span></div>
+  <div class="legend-item">
+    <div style="width:14px;height:14px;background:#fcd34d;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#92400e;border:2px solid #fde68a">★</div>
+    <span>Empfehlungs-Toggle („schlagt uns was vor")</span>
+  </div>
+</div>
+
+<div style="text-align:center;margin-top:14px;font-size:9px;color:#94a3b8;font-family:'IBM Plex Mono'">
+  Union Sport Event-Tool · Architektur-Diagramm · Stand 14.04.2026 · Intern — www.union-sport.ch · events@union-sport.ch
+</div>
+
+</div>
+</body>
+</html>
