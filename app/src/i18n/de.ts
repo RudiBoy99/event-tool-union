@@ -1,0 +1,66 @@
+export const de = {
+  hero: {
+    eyebrow: 'B2B · Teambuilding · Turnier · Geburtstag',
+    title1: 'Dein',
+    titleAccent: 'Event.',
+    title2: 'Unser',
+    titleUnderline: 'Platz.',
+    subtitle: 'Padel, Tennis, Golf, Pickle-Ball — an drei Standorten in Basel. Anfrage in 3 Minuten, Angebot in 24 Stunden.',
+    ctaPrimary: 'Event planen →',
+    ctaSecondary: 'Beispiele',
+    stats: { locations: 'Standorte', sports: 'Sportarten', people: 'Personen/Event', response: 'Antwortzeit' },
+  },
+  nav: { back: '← Zurück', next: 'Weiter →', submit: 'Anfrage senden' },
+  steps: {
+    indicator: 'Schritt {{n}} / 07',
+    contact: {
+      title: 'Wie erreichen wir dich?',
+      name: 'Name', company: 'Firma (optional)', email: 'E-Mail', phone: 'Telefon', language: 'Sprache',
+    },
+    location: { title: 'Wo steigt\'s?' },
+    date: {
+      title: 'Wann soll\'s steigen?',
+      date: 'Datum', startTime: 'Startzeit', duration: 'Dauer',
+      durations: { '2h': '2 h', '4h': '4 h', '6h': '6 h', day: 'Ganzer Tag' },
+      available: 'Courts verfügbar',
+      tight: 'Knapp — hier sind Alternativen',
+      full: 'Leider belegt — wir empfehlen:',
+      best: 'Beste Option',
+      chooseSlot: 'Wählen →',
+    },
+    eventType: {
+      title: 'Was planst du?',
+      birthday: 'Geburtstag', corporate: 'Firmenanlass', teambuilding: 'Teambuilding',
+      tournament: 'Turnier', camp: 'Camp', school: 'Schule/Jugend', court_only: 'Court-Only',
+    },
+    attendees: {
+      title: 'Teilnehmer & Sport',
+      count: 'Personenzahl', ageGroup: 'Altersgruppe', level: 'Level',
+      ageGroups: { children: 'Kinder', teens: 'Jugend', adults: 'Erwachsene', mixed: 'Gemischt' },
+      levels: { beginner: 'Anfänger', intermediate: 'Fortgeschritten', advanced: 'Pro', mixed: 'Gemischt' },
+      sports: 'Sportart(en)', courts: 'Courts',
+    },
+    extras: {
+      title: 'Extras & Gastro',
+      gastro: 'Gastro', bistro: 'Bistro', drinks: 'Getränkepauschale', apero: 'Apéro',
+      foodtruck: 'Foodtruck', externalCatering: 'Externes Catering',
+      rooms: 'Räume', lounge: 'Eventlounge', meetingRoom: 'Meetingraum',
+      otherExtras: 'Weitere Extras', coach: 'Coach/Trainer', equipment: 'Equipment-Leihe',
+      photographer: 'Fotograf', music: 'Musik/DJ', trophies: 'Pokale',
+    },
+    review: {
+      title: 'Fast geschafft.',
+      meeting: 'Persönliches Gespräch?',
+      meetingOptions: { none: 'Nicht nötig', call: 'Call', onsite: 'Vor Ort' },
+      note: 'Sonstiges (optional)',
+      editLink: 'Ändern',
+    },
+    confirmation: {
+      title: 'Danke!',
+      subtitle: 'Referenznummer #{{ref}}. Wir melden uns in 24 h mit deinem Angebot.',
+      ctaNew: 'Noch eine Anfrage',
+      ctaHome: 'Zur Übersicht',
+    },
+  },
+}
+export default de
