@@ -32,9 +32,6 @@ export function LocationStep({ step, onBack, onNext }: Props) {
                 )}
               >
                 <div className="font-extrabold text-lg">{loc.name}</div>
-                <div className="text-xs text-white/60 mt-1">
-                  {t(`steps.location.tagline.${loc.id}`)}
-                </div>
               </button>
             ))}
           </div>

@@ -23,7 +23,7 @@ export const LOCATIONS: Record<string, LocationInfo> = {
   },
   wolf: {
     id: 'wolf',
-    name: 'Union P-Ball — Basel Wolf',
+    name: 'Union Pickle-Ball — Basel Wolf',
     sports: {
       pball: 4,
       tabletennis: 4,
