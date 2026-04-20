@@ -1,10 +1,14 @@
-import { Button } from '@/components/ui/button'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { EventRequestWizard } from '@/features/event-request/EventRequestWizard'
+import { HeroScreen } from '@/features/event-request/steps/HeroScreen'
 
 export default function App() {
   return (
-    <div className="min-h-screen flex items-center justify-center gap-4">
-      <Button variant="accent" size="lg">Event planen →</Button>
-      <Button variant="ghost_outline" size="lg">Beispiele</Button>
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<HeroScreen />} />
+        <Route path="/request" element={<EventRequestWizard />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
