@@ -1,0 +1,45 @@
+import type { LocationInfo } from '../types'
+
+export const LOCATIONS: Record<string, LocationInfo> = {
+  muenchenstein: {
+    id: 'muenchenstein',
+    name: 'Union Sport Münchenstein',
+    sports: {
+      padel_panorama: 5,
+      padel_single: 1,
+      tennis_indoor: 5,
+      tennis_outdoor: 2,
+      golf_sim: 3,
+      golf_range: 5,
+      putting_green: 1,
+    },
+  },
+  hafen: {
+    id: 'hafen',
+    name: 'Union Padel — Basel Hafen',
+    sports: {
+      padel_indoor: 5,
+    },
+  },
+  wolf: {
+    id: 'wolf',
+    name: 'Union P-Ball — Basel Wolf',
+    sports: {
+      pball: 4,
+      tabletennis: 4,
+    },
+  },
+}
+
+export const SPORT_LABELS: Record<string, { de: string; en: string }> = {
+  padel_panorama: { de: 'Padel Panorama', en: 'Padel Panorama' },
+  padel_single: { de: 'Padel Single', en: 'Padel Single' },
+  padel_indoor: { de: 'Padel Indoor', en: 'Padel Indoor' },
+  tennis_indoor: { de: 'Tennis Indoor', en: 'Tennis Indoor' },
+  tennis_outdoor: { de: 'Tennis Outdoor', en: 'Tennis Outdoor' },
+  golf_sim: { de: 'Golf Simulator', en: 'Golf Simulator' },
+  golf_range: { de: 'Driving Range', en: 'Driving Range' },
+  putting_green: { de: 'Putting Green', en: 'Putting Green' },
+  pball: { de: 'Pickle-Ball', en: 'Pickle-Ball' },
+  tabletennis: { de: 'Tischtennis', en: 'Table Tennis' },
+}

@@ -1,0 +1,15 @@
+{
+  "muenchenstein": [
+    { "date": "2026-08-15", "from": "19:00", "to": "22:00", "blockedCourts": { "padel_panorama": 5, "padel_single": 1 } },
+    { "date": "2026-08-22", "from": "18:00", "to": "22:00", "blockedCourts": { "tennis_indoor": 5 } },
+    { "date": "2026-09-05", "from": "10:00", "to": "14:00", "blockedCourts": { "padel_panorama": 3 } }
+  ],
+  "hafen": [
+    { "date": "2026-08-15", "from": "19:00", "to": "22:00", "blockedCourts": { "padel_indoor": 4 } },
+    { "date": "2026-08-15", "from": "14:00", "to": "17:00", "blockedCourts": { "padel_indoor": 2 } },
+    { "date": "2026-08-29", "from": "19:30", "to": "22:00", "blockedCourts": { "padel_indoor": 5 } }
+  ],
+  "wolf": [
+    { "date": "2026-08-15", "from": "18:00", "to": "20:00", "blockedCourts": { "pball": 2 } }
+  ]
+}
