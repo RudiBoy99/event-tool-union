@@ -31,7 +31,7 @@ function ToggleGroup({ title, path, keys, labelPrefix }: {
             className={cn(
               'px-4 py-2 text-xs font-semibold rounded-full border transition',
               values[k]
-                ? 'bg-[var(--color-accent)] text-black border-transparent'
+                ? 'bg-[var(--color-brand)] text-black border-transparent'
                 : 'border-white/20 text-white/80 hover:text-white',
             )}
           >

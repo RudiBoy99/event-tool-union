@@ -28,7 +28,7 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
                 className={cn(
                   'p-5 rounded-md border text-left transition',
                   field.value === type
-                    ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)]'
+                    ? 'border-[var(--color-brand)] bg-[var(--color-brand-soft)]'
                     : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]',
                 )}
               >

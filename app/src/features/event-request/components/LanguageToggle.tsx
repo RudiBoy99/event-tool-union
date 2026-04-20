@@ -8,7 +8,7 @@ export function LanguageToggle() {
     cn(
       'px-3 py-1 text-[10px] tracking-[0.1em] uppercase rounded-full border transition',
       active === lang
-        ? 'bg-[var(--color-accent)] text-black border-transparent'
+        ? 'bg-[var(--color-brand)] text-black border-transparent'
         : 'border-white/20 text-white/70 hover:text-white',
     )
   return (

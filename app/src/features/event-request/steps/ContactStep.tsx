@@ -20,7 +20,7 @@ export function ContactStep({ step, onBack, onNext }: Props) {
     <StepShell currentStep={step} onBack={onBack} onNext={handleNext}>
       <h1 className="display-xl text-4xl md:text-5xl mb-8">
         {t('steps.contact.title').split(' ').slice(0, -1).join(' ')}{' '}
-        <span className="text-[var(--color-accent)]">
+        <span className="text-[var(--color-brand)]">
           {t('steps.contact.title').split(' ').slice(-1)}
         </span>
       </h1>

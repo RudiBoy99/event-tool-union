@@ -8,8 +8,8 @@
 @theme {
   --color-bg-primary: #0A0A0A;
   --color-bg-surface: rgba(255, 255, 255, 0.04);
-  --color-accent: #FF6B1A;
-  --color-accent-soft: rgba(255, 107, 26, 0.08);
+  --color-brand: #FF6B1A;
+  --color-brand-soft: rgba(255, 107, 26, 0.08);
   --color-text-primary: #FFFFFF;
   --color-text-secondary: rgba(255, 255, 255, 0.6);
   --color-text-muted: rgba(255, 255, 255, 0.35);
@@ -39,6 +39,10 @@
     @apply border-border outline-ring/50; }
   body {
     @apply bg-background text-foreground;
+  }
+  body {
+    background: var(--color-bg-primary) !important;
+    color: var(--color-text-primary) !important;
   }
   html {
     @apply font-sans;

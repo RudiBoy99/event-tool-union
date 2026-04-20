@@ -21,7 +21,7 @@ export function StepShell({ currentStep, children, onBack, onNext, nextDisabled,
     <div className="min-h-screen bg-[var(--color-bg-primary)] text-white flex flex-col">
       <header className="flex items-center justify-between px-6 md:px-10 py-5 border-b border-white/10">
         <div className="flex items-center gap-2 font-extrabold text-xs tracking-[0.12em]">
-          <div className="w-3.5 h-3.5 rounded-full bg-[var(--color-accent)]" />
+          <div className="w-3.5 h-3.5 rounded-full bg-[var(--color-brand)]" />
           UNION SPORT · EVENTS
         </div>
         <div className="flex items-center gap-4">

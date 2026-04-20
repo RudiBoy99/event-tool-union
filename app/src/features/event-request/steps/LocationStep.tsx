@@ -27,7 +27,7 @@ export function LocationStep({ step, onBack, onNext }: Props) {
                 className={cn(
                   'text-left p-5 rounded-md transition border',
                   field.value === loc.id
-                    ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)]'
+                    ? 'border-[var(--color-brand)] bg-[var(--color-brand-soft)]'
                     : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]',
                 )}
               >

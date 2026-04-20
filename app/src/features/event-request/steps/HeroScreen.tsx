@@ -20,7 +20,7 @@ export function HeroScreen() {
 
       <header className="relative flex items-center justify-between px-6 md:px-12 py-5">
         <div className="flex items-center gap-2 font-extrabold text-xs tracking-[0.12em]">
-          <div className="w-3.5 h-3.5 rounded-full bg-[var(--color-accent)]" />
+          <div className="w-3.5 h-3.5 rounded-full bg-[var(--color-brand)]" />
           UNION SPORT · EVENTS
         </div>
         <LanguageToggle />
@@ -28,13 +28,13 @@ export function HeroScreen() {
 
       <main className="relative max-w-[1200px] mx-auto px-6 md:px-12 pt-10 pb-20 grid md:grid-cols-[1.3fr_1fr] gap-12 items-center">
         <div>
-          <div className="text-[10px] tracking-[0.3em] text-[var(--color-accent)] font-bold mb-5">
+          <div className="text-[10px] tracking-[0.3em] text-[var(--color-brand)] font-bold mb-5">
             ★ {t('hero.eyebrow')}
           </div>
           <h1 className="display-xl text-6xl md:text-8xl mb-5">
-            {t('hero.title1')} <span className="text-[var(--color-accent)]">{t('hero.titleAccent')}</span><br />
+            {t('hero.title1')} <span className="text-[var(--color-brand)]">{t('hero.titleAccent')}</span><br />
             {t('hero.title2')}{' '}
-            <span className="underline decoration-[var(--color-accent)] decoration-[5px] underline-offset-[10px]">
+            <span className="underline decoration-[var(--color-brand)] decoration-[5px] underline-offset-[10px]">
               {t('hero.titleUnderline')}
             </span>
           </h1>
@@ -60,7 +60,7 @@ export function HeroScreen() {
 function Stat({ value, label }: { value: string; label: string }) {
   return (
     <div className="bg-white/[0.04] border border-white/10 rounded-md p-5">
-      <div className="text-3xl md:text-4xl font-black text-[var(--color-accent)]">{value}</div>
+      <div className="text-3xl md:text-4xl font-black text-[var(--color-brand)]">{value}</div>
       <div className="label-caps mt-1">{label}</div>
     </div>
   )

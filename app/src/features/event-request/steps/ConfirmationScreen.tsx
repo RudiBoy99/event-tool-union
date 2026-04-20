@@ -10,7 +10,7 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
   return (
     <StepShell currentStep={7} hideNav>
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center gap-6">
-        <div className="w-20 h-20 rounded-full bg-[var(--color-accent)] flex items-center justify-center text-black text-4xl font-black">
+        <div className="w-20 h-20 rounded-full bg-[var(--color-brand)] flex items-center justify-center text-black text-4xl font-black">
           ✓
         </div>
         <h1 className="display-xl text-5xl md:text-6xl">{t('steps.confirmation.title')}</h1>

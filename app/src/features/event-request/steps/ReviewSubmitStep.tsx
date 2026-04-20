@@ -47,7 +47,7 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
                   className={cn(
                     'px-4 py-2 text-xs font-semibold rounded-full border transition',
                     field.value === opt
-                      ? 'bg-[var(--color-accent)] text-black border-transparent'
+                      ? 'bg-[var(--color-brand)] text-black border-transparent'
                       : 'border-white/20 text-white/80',
                   )}
                 >

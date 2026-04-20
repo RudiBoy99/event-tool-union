@@ -16,7 +16,7 @@ export function AlternativeSlotCard({
       className={cn(
         'w-full text-left rounded-md px-3.5 py-3 flex items-center justify-between transition',
         slot.isBest
-          ? 'border-2 border-[var(--color-accent)] bg-[var(--color-accent-soft)]'
+          ? 'border-2 border-[var(--color-brand)] bg-[var(--color-brand-soft)]'
           : 'border border-white/10 bg-white/[0.02] hover:bg-white/[0.04]',
       )}
     >
@@ -28,7 +28,7 @@ export function AlternativeSlotCard({
           {slot.freeCourts} courts free{slot.isBest ? ` · ${t('steps.date.best')}` : ''}
         </div>
       </div>
-      <div className="text-[var(--color-accent)] font-extrabold text-xs">{t('steps.date.chooseSlot')}</div>
+      <div className="text-[var(--color-brand)] font-extrabold text-xs">{t('steps.date.chooseSlot')}</div>
     </button>
   )
 }

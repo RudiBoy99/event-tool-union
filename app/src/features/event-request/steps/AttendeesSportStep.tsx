@@ -104,7 +104,7 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
               key={sport}
               className={cn(
                 'p-4 rounded-md border flex items-center justify-between gap-3',
-                picked ? 'border-[var(--color-accent)] bg-[var(--color-accent-soft)]' : 'border-white/10 bg-white/[0.02]',
+                picked ? 'border-[var(--color-brand)] bg-[var(--color-brand-soft)]' : 'border-white/10 bg-white/[0.02]',
               )}
             >
               <button
@@ -114,7 +114,7 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
                 <span
                   className={cn(
                     'w-5 h-5 rounded flex items-center justify-center text-xs',
-                    picked ? 'bg-[var(--color-accent)] text-black' : 'border border-white/30',
+                    picked ? 'bg-[var(--color-brand)] text-black' : 'border border-white/30',
                   )}
                 >
                   {picked ? '✓' : ''}

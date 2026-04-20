@@ -59,7 +59,7 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
     <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={result?.status === 'full'}>
       <h1 className="display-xl text-4xl md:text-5xl mb-8">
         {t('steps.date.title').split(' ').slice(0, -1).join(' ')}{' '}
-        <span className="text-[var(--color-accent)]">
+        <span className="text-[var(--color-brand)]">
           {t('steps.date.title').split(' ').slice(-1)}
         </span>
       </h1>
@@ -83,7 +83,7 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
               className={cn(
                 'px-3.5 py-2 text-xs font-semibold rounded-full border transition',
                 duration === d.minutes
-                  ? 'bg-[var(--color-accent)] text-black border-transparent'
+                  ? 'bg-[var(--color-brand)] text-black border-transparent'
                   : 'border-white/20 text-white/80 hover:text-white',
               )}
             >
