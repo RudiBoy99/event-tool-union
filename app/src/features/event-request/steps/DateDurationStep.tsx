@@ -93,7 +93,7 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
 
       <div className="mb-6">
         <Label className="label-caps">{t('steps.date.duration')}</Label>
-        <div className="flex gap-2 mt-2 flex-wrap">
+        <div className="flex gap-2 mt-2 flex-wrap items-center">
           {DURATIONS.map((d) => (
             <button
               key={d.key}
@@ -109,6 +109,35 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
               {t(`steps.date.durations.${d.key}`)}
             </button>
           ))}
+          <span className="text-xs text-white/40 mx-1">{t('steps.date.or')}</span>
+          <div
+            className={cn(
+              'flex items-center gap-1 rounded-full border transition',
+              !DURATIONS.some((d) => d.minutes === duration) && duration > 0
+                ? 'border-[var(--color-brand)] bg-[var(--color-brand-soft)]'
+                : 'border-white/20',
+            )}
+          >
+            <input
+              type="number"
+              step="0.5"
+              min="0.5"
+              max="24"
+              inputMode="decimal"
+              value={
+                !DURATIONS.some((d) => d.minutes === duration) && duration > 0
+                  ? String(duration / 60)
+                  : ''
+              }
+              placeholder={t('steps.date.customPlaceholder')}
+              onChange={(e) => {
+                const h = Number(e.target.value)
+                if (h > 0 && h <= 24) setValue('dateTime.durationMinutes', Math.round(h * 60))
+              }}
+              className="w-[68px] bg-transparent pl-3 pr-1 py-2 text-xs font-semibold text-white placeholder:text-white/40 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            />
+            <span className="pr-3 text-xs text-white/60">h</span>
+          </div>
         </div>
       </div>
 

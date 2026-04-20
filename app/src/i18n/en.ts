@@ -29,6 +29,8 @@ export const en = {
       title: 'When?',
       date: 'Date', startTime: 'Start', duration: 'Duration', pickDate: 'Pick a date…',
       durations: { '2h': '2 h', '4h': '4 h', '6h': '6 h', day: 'All day' },
+      or: 'or',
+      customPlaceholder: 'Hours',
       available: 'Courts available',
       tight: 'Tight — we suggest:',
       full: 'Sold out — suggestions:',

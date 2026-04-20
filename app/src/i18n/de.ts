@@ -29,6 +29,8 @@ export const de = {
       title: 'Wann soll\'s steigen?',
       date: 'Datum', startTime: 'Startzeit', duration: 'Dauer', pickDate: 'Datum wählen…',
       durations: { '2h': '2 h', '4h': '4 h', '6h': '6 h', day: 'Ganzer Tag' },
+      or: 'oder',
+      customPlaceholder: 'Dauer',
       available: 'Courts verfügbar',
       tight: 'Knapp — hier sind Alternativen',
       full: 'Leider belegt — wir empfehlen:',
