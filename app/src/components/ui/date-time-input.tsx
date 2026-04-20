@@ -4,8 +4,8 @@ import { format } from "date-fns"
 import { de } from "date-fns/locale"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Input } from "@/components/ui/input"
-import { Calendar as CalendarIcon, Clock } from "lucide-react"
+import { TimePicker } from "@/components/ui/time-picker"
+import { Calendar as CalendarIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 interface DateTimeInputProps {
@@ -55,7 +55,6 @@ export function DateTimeInput({
               selected={date}
               onSelect={onDateChange}
               locale={locale === 'de' ? de : undefined}
-              autoFocus
             />
           </PopoverContent>
         </Popover>
@@ -64,15 +63,8 @@ export function DateTimeInput({
       {/* Time */}
       <div className="flex flex-col gap-1.5">
         <label className="label-caps">{timeLabel}</label>
-        <div className="relative">
-          <Clock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-[var(--color-brand)] pointer-events-none" />
-          <Input
-            type="time"
-            value={time}
-            onChange={(e) => onTimeChange(e.target.value)}
-            step="300"
-            className="h-10 pl-9 bg-white/[0.04] border-white/10 text-white [color-scheme:dark]"
-          />
+        <div className="h-10 flex items-center">
+          <TimePicker value={time} onChange={onTimeChange} />
         </div>
       </div>
     </div>
