@@ -20,7 +20,7 @@ export const de = {
     location: { title: 'Wo steigt\'s?' },
     date: {
       title: 'Wann soll\'s steigen?',
-      date: 'Datum', startTime: 'Startzeit', duration: 'Dauer',
+      date: 'Datum', startTime: 'Startzeit', duration: 'Dauer', pickDate: 'Datum wählen…',
       durations: { '2h': '2 h', '4h': '4 h', '6h': '6 h', day: 'Ganzer Tag' },
       available: 'Courts verfügbar',
       tight: 'Knapp — hier sind Alternativen',

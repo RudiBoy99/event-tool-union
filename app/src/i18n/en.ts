@@ -20,7 +20,7 @@ export const en = {
     location: { title: 'Where?' },
     date: {
       title: 'When?',
-      date: 'Date', startTime: 'Start', duration: 'Duration',
+      date: 'Date', startTime: 'Start', duration: 'Duration', pickDate: 'Pick a date…',
       durations: { '2h': '2 h', '4h': '4 h', '6h': '6 h', day: 'All day' },
       available: 'Courts available',
       tight: 'Tight — we suggest:',

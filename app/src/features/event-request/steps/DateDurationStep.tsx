@@ -7,7 +7,7 @@ import { AvailabilityBadge } from '../components/AvailabilityBadge'
 import { AlternativeSlotCard } from '../components/AlternativeSlotCard'
 import { checkAvailability } from '../logic/availability'
 import { LOCATIONS } from '../data/locations'
-import { Input } from '@/components/ui/input'
+import { DateTimeInput } from '@/components/ui/date-time-input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 
@@ -20,9 +20,23 @@ const DURATIONS = [
 
 interface Props { step: number; onBack?: () => void; onNext: () => void }
 
+function formatDate(d: Date): string {
+  const y = d.getFullYear()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${y}-${m}-${day}`
+}
+
+function parseDate(s: string): Date | undefined {
+  if (!s) return undefined
+  const [y, m, d] = s.split('-').map(Number)
+  if (!y || !m || !d) return undefined
+  return new Date(y, m - 1, d)
+}
+
 export function DateDurationStep({ step, onBack, onNext }: Props) {
-  const { t } = useTranslation()
-  const { register, setValue, watch } = useFormContext<EventRequestData>()
+  const { t, i18n } = useTranslation()
+  const { setValue, watch } = useFormContext<EventRequestData>()
   const location = watch('location')
   const date = watch('dateTime.date')
   const startTime = watch('dateTime.startTime')
@@ -63,28 +77,33 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
           {t('steps.date.title').split(' ').slice(-1)}
         </span>
       </h1>
-      <div className="grid grid-cols-2 gap-3 mb-4">
-        <div>
-          <Label className="label-caps">{t('steps.date.date')}</Label>
-          <Input type="date" {...register('dateTime.date')} />
-        </div>
-        <div>
-          <Label className="label-caps">{t('steps.date.startTime')}</Label>
-          <Input type="time" {...register('dateTime.startTime')} />
-        </div>
+
+      <div className="mb-6">
+        <DateTimeInput
+          date={parseDate(date)}
+          onDateChange={(d) => setValue('dateTime.date', d ? formatDate(d) : '')}
+          time={startTime}
+          onTimeChange={(t) => setValue('dateTime.startTime', t)}
+          locale={i18n.language.startsWith('en') ? 'en' : 'de'}
+          dateLabel={t('steps.date.date')}
+          timeLabel={t('steps.date.startTime')}
+          pickDateLabel={t('steps.date.pickDate') || 'Datum wählen…'}
+        />
       </div>
+
       <div className="mb-6">
         <Label className="label-caps">{t('steps.date.duration')}</Label>
         <div className="flex gap-2 mt-2 flex-wrap">
           {DURATIONS.map((d) => (
             <button
               key={d.key}
+              type="button"
               onClick={() => setValue('dateTime.durationMinutes', d.minutes)}
               className={cn(
                 'px-3.5 py-2 text-xs font-semibold rounded-full border transition',
                 duration === d.minutes
                   ? 'bg-[var(--color-brand)] text-black border-transparent'
-                  : 'border-white/20 text-white/80 hover:text-white',
+                  : 'border-white/20 text-white/80 hover:text-white hover:border-white/40',
               )}
             >
               {t(`steps.date.durations.${d.key}`)}
