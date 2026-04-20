@@ -17,7 +17,14 @@ export const de = {
       title: 'Wie erreichen wir dich?',
       name: 'Name', company: 'Firma (optional)', email: 'E-Mail', phone: 'Telefon', language: 'Sprache',
     },
-    location: { title: 'Wo steigt\'s?' },
+    location: {
+      title: 'Wo steigt\'s?',
+      tagline: {
+        muenchenstein: 'Hauptstandort · 15 000 m² am Waldrand · Gastro & Parkplätze',
+        hafen: 'Uferstrasse 70 · Direkt am Rheinhafen · Spezialist für Padel-Events',
+        wolf: 'Halle 4 · St. Jakob-Strasse · Indoor-Arena für kleinere Gruppen',
+      },
+    },
     date: {
       title: 'Wann soll\'s steigen?',
       date: 'Datum', startTime: 'Startzeit', duration: 'Dauer', pickDate: 'Datum wählen…',

@@ -17,7 +17,14 @@ export const en = {
       title: 'How to reach you?',
       name: 'Name', company: 'Company (optional)', email: 'Email', phone: 'Phone', language: 'Language',
     },
-    location: { title: 'Where?' },
+    location: {
+      title: 'Where?',
+      tagline: {
+        muenchenstein: 'Main venue · 15,000 m² by the forest · Bistro & parking',
+        hafen: 'Uferstrasse 70 · Right at the Rhine harbour · Padel-focused',
+        wolf: 'Hall 4 · St. Jakob-Strasse · Indoor arena for smaller groups',
+      },
+    },
     date: {
       title: 'When?',
       date: 'Date', startTime: 'Start', duration: 'Duration', pickDate: 'Pick a date…',
