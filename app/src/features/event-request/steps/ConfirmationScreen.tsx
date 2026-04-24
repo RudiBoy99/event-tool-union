@@ -32,28 +32,16 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
         style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}
       >
         <div className="flex items-center gap-2.5">
-          <div className="relative w-5 h-5 flex-shrink-0">
-            <div
-              className="w-5 h-5"
-              style={{ background: 'var(--color-brand)', transition: 'background 400ms ease' }}
-            />
-            <div
-              className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-[var(--color-sand)]"
-              style={{ borderRadius: '100% 0 0 0' }}
-            />
-          </div>
-          <span
-            className="font-black text-[11px] tracking-[0.15em] uppercase text-black"
-            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
-          >
-            UNION SPORT · EVENTS
-          </span>
+          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
         </div>
       </header>
 
       {/* Confirmation content */}
       <main className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-10 py-12 md:py-20">
         <div className="max-w-xl">
+          {/* Logo above headline */}
+          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-12 md:h-16 w-auto mb-8" />
+
           {/* Big DANKE headline */}
           <h1
             className="display-xl text-[80px] md:text-[120px] leading-none mb-6 text-black"

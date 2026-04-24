@@ -17,6 +17,8 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onSubmit} nextLabel={t('nav.submit')} surface="sand">
+      <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-6 md:h-8 w-auto mb-6" />
+
       <h1
         className="display-xl text-3xl md:text-4xl mb-8 text-black"
       >

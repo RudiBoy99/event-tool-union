@@ -25,12 +25,24 @@ export function LocationStep({ step, onBack, onNext }: Props) {
                 key={loc.id}
                 onClick={() => field.onChange(loc.id)}
                 className={cn(
-                  'text-left p-5 transition-all duration-200',
+                  'relative text-left p-5 transition-all duration-200 overflow-hidden',
                   field.value === loc.id
                     ? 'bg-[var(--color-brand)] text-black'
                     : 'border border-white/15 bg-white/[0.02] hover:bg-white/[0.04] text-white',
                 )}
               >
+                {/* Viertelkreis decoration — top-right */}
+                <div
+                  aria-hidden="true"
+                  className="absolute top-0 right-0"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '0 0 0 100%',
+                    background: field.value === loc.id ? 'rgba(0,0,0,0.15)' : 'var(--color-brand)',
+                    opacity: field.value === loc.id ? 1 : 0.35,
+                  }}
+                />
                 <div
                   className="font-black text-lg uppercase tracking-wide"
                   style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}

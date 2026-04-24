@@ -62,27 +62,7 @@ export function StepShell({
         }}
       >
         <div className="flex items-center gap-2.5">
-          {/* Ball icon: quarter-circle-in-square */}
-          <div className="relative w-5 h-5 flex-shrink-0">
-            <div
-              className="w-5 h-5"
-              style={{ background: 'var(--color-brand)', transition: 'background 400ms ease' }}
-            />
-            <div
-              className="absolute bottom-0 right-0 w-2.5 h-2.5"
-              style={{
-                background: isSand ? 'var(--color-sand)' : '#000000',
-                borderRadius: '100% 0 0 0',
-                transition: 'background 400ms ease',
-              }}
-            />
-          </div>
-          <span
-            className="font-black text-[11px] tracking-[0.15em] uppercase"
-            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif', color: isSand ? '#000' : '#fff' }}
-          >
-            UNION SPORT · EVENTS
-          </span>
+          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
         </div>
         <div className="flex items-center gap-4">
           <StepIndicator current={currentStep} />

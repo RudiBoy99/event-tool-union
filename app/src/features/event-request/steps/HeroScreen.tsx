@@ -17,17 +17,7 @@ export function HeroScreen() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 md:px-10 py-4 border-b border-white/[0.08] flex-shrink-0">
         <div className="flex items-center gap-2.5">
-          {/* Brand dot — the quarter-circle-in-square ball icon */}
-          <div className="relative w-5 h-5 flex-shrink-0">
-            <div className="w-5 h-5 bg-[var(--color-brand)]" />
-            <div
-              className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-black"
-              style={{ borderRadius: '100% 0 0 0' }}
-            />
-          </div>
-          <span className="font-black text-[11px] tracking-[0.15em] uppercase" style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}>
-            UNION SPORT · EVENTS
-          </span>
+          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
         </div>
         <LanguageToggle />
       </header>
@@ -66,16 +56,11 @@ export function HeroScreen() {
             transition={{ duration: 0.5, delay: 0.35 }}
             className="grid grid-cols-2 mb-10 w-fit"
           >
-            {/* Cell 1: Orange solid with black brand name */}
+            {/* Cell 1: Orange solid with centered ball icon */}
             <div
-              className="w-24 h-24 md:w-32 md:h-32 bg-[var(--color-brand)] flex items-end p-2"
+              className="w-24 h-24 md:w-32 md:h-32 bg-[var(--color-brand)] flex items-center justify-center"
             >
-              <span
-                className="text-black font-black text-[8px] leading-tight uppercase tracking-tight"
-                style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
-              >
-                UNION<br />SPORT
-              </span>
+              <img src="/logos/UnionSport_Ball_RGB.png" alt="" className="w-[55%] h-auto" />
             </div>
             {/* Cell 2: Halftone padel image clipped to quarter-circle */}
             <div className="w-24 h-24 md:w-32 md:h-32 relative overflow-hidden bg-[#111]">

@@ -26,12 +26,20 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
                 key={type}
                 onClick={() => field.onChange(type)}
                 className={cn(
-                  'p-5 text-left transition-all duration-200',
+                  'relative p-5 text-left transition-all duration-200 overflow-hidden',
                   field.value === type
                     ? 'bg-[var(--color-brand)] text-black'
                     : 'border border-white/15 bg-white/[0.02] hover:bg-white/[0.04] text-white',
                 )}
               >
+                {/* Brand mark — top-right corner */}
+                <div className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center">
+                  {field.value === type ? (
+                    <div className="w-5 h-5 bg-[var(--color-sand)]" />
+                  ) : (
+                    <img src="/logos/UnionSport_Ball_RGB.png" alt="" className="w-5 h-5 object-contain" />
+                  )}
+                </div>
                 <div
                   className="font-black text-sm uppercase tracking-wider"
                   style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}

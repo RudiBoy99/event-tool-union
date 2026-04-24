@@ -28,6 +28,14 @@ const SPORT_LABELS: Record<string, string> = {
   tabletennis: 'Tischtennis',
 }
 
+const SPORT_BALL_ICONS: Record<string, string> = {
+  padel:       '/logos/UnionPadel_Ball_RGB.png',
+  tennis:      '/logos/UnionTennis_Ball_RGB.png',
+  golf:        '/logos/UnionGolf_Ball_RGB.png',
+  pball:       '/logos/UnionPickleball_Ball_RGB.png',
+  tabletennis: '/logos/UnionTableTennis_Ball_RGB.png',
+}
+
 interface Props { step: number; onBack?: () => void; onNext: () => void }
 
 export function AttendeesSportStep({ step, onBack, onNext }: Props) {
@@ -137,54 +145,40 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
             <button
               key={sport}
               onClick={() => toggleSport(sport)}
-              className="relative aspect-square flex flex-col items-start justify-between p-4 transition-all duration-300"
+              className="relative aspect-square flex flex-col items-center justify-center gap-3 p-4 transition-all duration-300"
               style={{
-                background: isActive ? sportColor : 'rgba(255,255,255,0.04)',
-                border: isActive ? `2px solid ${sportColor}` : '2px solid rgba(255,255,255,0.1)',
-                opacity: !isActive && (sports?.length ?? 0) > 0 ? 0.35 : 1,
+                background: '#000000',
+                border: isActive ? `3px solid ${sportColor}` : '2px solid rgba(255,255,255,0.1)',
+                opacity: !isActive && (sports?.length ?? 0) > 0 ? 0.4 : 1,
                 transition: 'all 300ms ease',
               }}
             >
-              {/* Quarter-circle decoration in corner */}
-              <div
-                className="absolute top-0 right-0 overflow-hidden"
-                style={{
-                  width: '40%',
-                  height: '40%',
-                }}
-              >
+              {/* Checkmark indicator — top-right when selected */}
+              {isActive && (
                 <div
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    borderRadius: '0 0 0 100%',
-                    background: isActive ? 'rgba(0,0,0,0.2)' : 'rgba(255,255,255,0.06)',
-                  }}
-                />
-              </div>
+                  className="absolute top-2 right-2 w-5 h-5 flex items-center justify-center text-[10px] font-black"
+                  style={{ background: sportColor, color: '#000' }}
+                >
+                  ✓
+                </div>
+              )}
 
-              {/* Checkmark */}
-              <div
-                className="w-5 h-5 flex items-center justify-center text-xs font-black"
-                style={{
-                  background: isActive ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.06)',
-                  color: isActive ? '#000' : 'rgba(255,255,255,0.4)',
-                }}
-              >
-                {isActive ? '✓' : ''}
-              </div>
+              {/* Ball icon */}
+              <img
+                src={SPORT_BALL_ICONS[sport] ?? '/logos/UnionSport_Ball_RGB.png'}
+                alt=""
+                className="w-[45%] h-auto object-contain"
+              />
 
               {/* Sport name */}
-              <div>
-                <div
-                  className="text-sm font-black uppercase tracking-wider leading-tight"
-                  style={{
-                    fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
-                    color: isActive ? '#000' : '#fff',
-                  }}
-                >
-                  {SPORT_LABELS[sport] ?? sport}
-                </div>
+              <div
+                className="text-xs font-black uppercase tracking-wider leading-tight text-center"
+                style={{
+                  fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
+                  color: isActive ? sportColor : 'rgba(255,255,255,0.7)',
+                }}
+              >
+                {SPORT_LABELS[sport] ?? sport}
               </div>
             </button>
           )
