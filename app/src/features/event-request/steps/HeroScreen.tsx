@@ -25,7 +25,7 @@ export function HeroScreen() {
               style={{ borderRadius: '100% 0 0 0' }}
             />
           </div>
-          <span className="font-black text-[11px] tracking-[0.15em] uppercase" style={{ fontFamily: 'Archivo Black, sans-serif' }}>
+          <span className="font-black text-[11px] tracking-[0.15em] uppercase" style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}>
             UNION SPORT · EVENTS
           </span>
         </div>
@@ -72,7 +72,7 @@ export function HeroScreen() {
             >
               <span
                 className="text-black font-black text-[8px] leading-tight uppercase tracking-tight"
-                style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
               >
                 UNION<br />SPORT
               </span>
@@ -120,7 +120,7 @@ export function HeroScreen() {
               <div key={i}>
                 <div
                   className="text-2xl font-black text-[var(--color-brand)] leading-none"
-                  style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                  style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
                 >
                   {s.v}
                 </div>
@@ -139,7 +139,7 @@ export function HeroScreen() {
             <button
               onClick={() => nav('/request?step=1')}
               className="inline-flex items-center gap-3 px-8 py-4 bg-[var(--color-brand)] text-black font-black text-sm uppercase tracking-[0.08em] hover:brightness-110 transition-all duration-200"
-              style={{ fontFamily: 'Archivo Black, sans-serif' }}
+              style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
             >
               {t('hero.ctaPrimary').replace(' →', '')}
               <span className="opacity-80">→</span>

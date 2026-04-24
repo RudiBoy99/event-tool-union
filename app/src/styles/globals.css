@@ -4,6 +4,29 @@
 @import "@fontsource/archivo-black/400.css";
 @import "@fontsource-variable/archivo";
 
+/* Union Sport Brand Fonts (licensed via Union Sport AG) */
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('/fonts/soehne-breit-buch.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('/fonts/soehne-breit-halbfett.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Söhne Breit';
+  src: url('/fonts/soehne-breit-fett.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 @theme {
@@ -37,9 +60,9 @@
   --color-danger:         #EF4444;
   --color-border-subtle:  rgba(255, 255, 255, 0.12);
 
-  /* Typography */
-  --font-display:         'Archivo Black', ui-sans-serif, system-ui, sans-serif;
-  --font-sans:            'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
+  /* Typography — Söhne Breit is the Union Sport brand font (licensed webfonts). Archivo is fallback. */
+  --font-display:         'Söhne Breit', 'Archivo Black', ui-sans-serif, system-ui, sans-serif;
+  --font-sans:            'Söhne Breit', 'Archivo Variable', 'Archivo', ui-sans-serif, system-ui, sans-serif;
 
   --radius-input:         0px;
   --radius-card:          0px;
@@ -71,7 +94,7 @@
 
 @layer utilities {
   .display-xl {
-    font-family: 'Archivo Black', ui-sans-serif, system-ui, sans-serif;
+    font-family: 'Söhne Breit', 'Archivo Black', ui-sans-serif, system-ui, sans-serif;
     font-weight: 900;
     letter-spacing: -0.02em;
     line-height: 0.95;

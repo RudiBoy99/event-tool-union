@@ -33,7 +33,7 @@ export function LocationStep({ step, onBack, onNext }: Props) {
               >
                 <div
                   className="font-black text-lg uppercase tracking-wide"
-                  style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                  style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
                 >
                   {loc.name}
                 </div>

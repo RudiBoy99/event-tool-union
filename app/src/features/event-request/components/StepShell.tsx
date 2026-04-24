@@ -79,7 +79,7 @@ export function StepShell({
           </div>
           <span
             className="font-black text-[11px] tracking-[0.15em] uppercase"
-            style={{ fontFamily: 'Archivo Black, sans-serif', color: isSand ? '#000' : '#fff' }}
+            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif', color: isSand ? '#000' : '#fff' }}
           >
             UNION SPORT · EVENTS
           </span>
@@ -123,7 +123,7 @@ export function StepShell({
                   disabled={nextDisabled || !onNext}
                   className="px-7 py-2.5 text-[11px] font-black tracking-[0.08em] uppercase transition-all duration-200 disabled:opacity-30 hover:brightness-110"
                   style={{
-                    fontFamily: 'Archivo Black, sans-serif',
+                    fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
                     background: isSand ? '#000000' : 'var(--color-brand)',
                     color: isSand ? '#ffffff' : '#000000',
                     transition: 'background 400ms ease',

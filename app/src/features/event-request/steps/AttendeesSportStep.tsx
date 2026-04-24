@@ -179,7 +179,7 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
                 <div
                   className="text-sm font-black uppercase tracking-wider leading-tight"
                   style={{
-                    fontFamily: 'Archivo Black, sans-serif',
+                    fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
                     color: isActive ? '#000' : '#fff',
                   }}
                 >
@@ -198,7 +198,7 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
             <div key={s.sport} className="flex items-center gap-4">
               <span
                 className="text-xs font-black uppercase tracking-wider flex-1"
-                style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
               >
                 {SPORT_LABELS[s.sport] ?? s.sport}
               </span>

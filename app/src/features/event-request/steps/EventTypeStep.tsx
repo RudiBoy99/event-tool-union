@@ -34,7 +34,7 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
               >
                 <div
                   className="font-black text-sm uppercase tracking-wider"
-                  style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                  style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
                 >
                   {t(`steps.eventType.${type}`)}
                 </div>

@@ -44,7 +44,7 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
           </div>
           <span
             className="font-black text-[11px] tracking-[0.15em] uppercase text-black"
-            style={{ fontFamily: 'Archivo Black, sans-serif' }}
+            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
           >
             UNION SPORT · EVENTS
           </span>
@@ -57,7 +57,7 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
           {/* Big DANKE headline */}
           <h1
             className="display-xl text-[80px] md:text-[120px] leading-none mb-6 text-black"
-            style={{ fontFamily: 'Archivo Black, sans-serif' }}
+            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
           >
             {t('steps.confirmation.title')}
           </h1>
@@ -79,7 +79,7 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
             <button
               onClick={() => window.location.assign('/')}
               className="px-7 py-3 text-[11px] font-black uppercase tracking-[0.08em] border-2 border-black text-black hover:bg-black hover:text-white transition-all"
-              style={{ fontFamily: 'Archivo Black, sans-serif' }}
+              style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
             >
               {t('steps.confirmation.ctaHome')}
             </button>
@@ -87,7 +87,7 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
               onClick={onNew}
               className="px-7 py-3 text-[11px] font-black uppercase tracking-[0.08em] hover:brightness-110 transition-all"
               style={{
-                fontFamily: 'Archivo Black, sans-serif',
+                fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
                 background: 'var(--color-brand)',
                 color: '#000000',
                 transition: 'background 400ms ease, filter 200ms ease',
