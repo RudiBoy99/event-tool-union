@@ -62,7 +62,11 @@ export function StepShell({
         }}
       >
         <div className="flex items-center gap-2.5">
-          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
+          <img
+            src={isSand ? '/logos/UnionSport_RGB.png' : '/logos/UnionSport_negativ-auf-Schwarz_RGB.png'}
+            alt="Union Sport"
+            className="h-7 md:h-8 w-auto"
+          />
         </div>
         <div className="flex items-center gap-4">
           <StepIndicator current={currentStep} />

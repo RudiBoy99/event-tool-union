@@ -17,7 +17,7 @@ export function HeroScreen() {
       {/* Header */}
       <header className="flex items-center justify-between px-6 md:px-10 py-4 border-b border-white/[0.08] flex-shrink-0">
         <div className="flex items-center gap-2.5">
-          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
+          <img src="/logos/UnionSport_negativ-auf-Schwarz_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
         </div>
         <LanguageToggle />
       </header>
