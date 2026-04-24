@@ -2,32 +2,48 @@ import { cn } from '@/lib/utils'
 
 type Grade = 1 | 2 | 3 | 4
 
-const GRADE_SIZE: Record<Grade, number> = { 1: 6, 2: 8, 3: 10, 4: 12 }
+const GRADE_DOT_SIZE: Record<Grade, number> = { 1: 3, 2: 4, 3: 5, 4: 6 }
 
 interface HalftoneImageProps {
   src: string
   alt?: string
   grade?: Grade
+  tint?: boolean
   className?: string
   style?: React.CSSProperties
 }
 
-export function HalftoneImage({ src, alt = '', grade = 2, className, style }: HalftoneImageProps) {
-  const maskSize = GRADE_SIZE[grade]
+export function HalftoneImage({
+  src,
+  alt = '',
+  grade = 2,
+  tint = true,
+  className,
+  style,
+}: HalftoneImageProps) {
+  const dot = GRADE_DOT_SIZE[grade]
   return (
-    <div className={cn('relative overflow-hidden', className)} style={style}>
+    <div
+      className={cn('relative overflow-hidden', className)}
+      style={{ background: 'var(--color-sand)', ...style }}
+    >
       <img
         src={src}
         alt={alt}
         className="absolute inset-0 w-full h-full object-cover"
         style={{
-          filter: 'grayscale(1) contrast(1.3) brightness(1.05)',
-          maskImage: `radial-gradient(circle at center, #000 38%, transparent 40%)`,
-          WebkitMaskImage: `radial-gradient(circle at center, #000 38%, transparent 40%)`,
-          maskSize: `${maskSize}px ${maskSize}px`,
-          WebkitMaskSize: `${maskSize}px ${maskSize}px`,
-          maskRepeat: 'repeat',
-          WebkitMaskRepeat: 'repeat',
+          filter: 'grayscale(1) contrast(1.15) brightness(1.02)',
+        }}
+      />
+      {/* Brand-tinted halftone dot overlay */}
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage: `radial-gradient(circle at center, var(--color-brand) 45%, transparent 48%)`,
+          backgroundSize: `${dot}px ${dot}px`,
+          mixBlendMode: tint ? 'multiply' : 'darken',
+          opacity: 0.85,
         }}
       />
     </div>
