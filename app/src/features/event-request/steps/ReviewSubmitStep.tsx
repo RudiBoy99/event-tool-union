@@ -16,10 +16,15 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
   const data = watch()
 
   return (
-    <StepShell currentStep={step} onBack={onBack} onNext={onSubmit} nextLabel={t('nav.submit')}>
-      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.review.title')}</h1>
+    <StepShell currentStep={step} onBack={onBack} onNext={onSubmit} nextLabel={t('nav.submit')} surface="sand">
+      <h1
+        className="display-xl text-3xl md:text-4xl mb-8 text-black"
+      >
+        {t('steps.review.title')}
+      </h1>
 
-      <div className="space-y-5 mb-8 text-sm">
+      {/* Review rows */}
+      <div className="space-y-0 mb-8 text-sm">
         <Row label={t('steps.contact.title')} value={`${data.contact.name} · ${data.contact.email}`} />
         <Row label={t('steps.location.title')} value={data.location} />
         <Row
@@ -33,22 +38,23 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
         />
       </div>
 
+      {/* Meeting preference */}
       <Controller
         name="meeting.wish"
         control={control}
         render={({ field }) => (
           <div className="mb-6">
-            <Label className="label-caps mb-3 block">{t('steps.review.meeting')}</Label>
-            <div className="flex gap-2">
+            <Label className="label-caps-dark mb-3 block">{t('steps.review.meeting')}</Label>
+            <div className="flex flex-wrap gap-2">
               {MEETING_OPTS.map((opt) => (
                 <button
                   key={opt}
                   onClick={() => field.onChange(opt)}
                   className={cn(
-                    'px-4 py-2 text-xs font-semibold rounded-full border transition',
+                    'px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-all',
                     field.value === opt
-                      ? 'bg-[var(--color-brand)] text-black border-transparent'
-                      : 'border-white/20 text-white/80',
+                      ? 'bg-black text-white'
+                      : 'border border-black/20 text-black/70 hover:border-black/40',
                   )}
                 >
                   {t(`steps.review.meetingOptions.${opt}`)}
@@ -59,9 +65,14 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
         )}
       />
 
+      {/* Note textarea */}
       <div>
-        <Label className="label-caps">{t('steps.review.note')}</Label>
-        <Textarea rows={3} {...register('meeting.note')} />
+        <Label className="label-caps-dark">{t('steps.review.note')}</Label>
+        <Textarea
+          rows={3}
+          {...register('meeting.note')}
+          className="mt-1 bg-black/5 border-black/15 text-black placeholder:text-black/40 resize-none"
+        />
       </div>
     </StepShell>
   )
@@ -69,9 +80,9 @@ export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
 
 function Row({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex items-start justify-between gap-4 pb-3 border-b border-white/10">
-      <div className="label-caps flex-shrink-0 w-32">{label}</div>
-      <div className="text-right text-white/80">{value}</div>
+    <div className="flex items-start justify-between gap-4 py-3 border-b border-black/10">
+      <div className="label-caps-dark flex-shrink-0 w-32">{label}</div>
+      <div className="text-right text-black/80 text-sm">{value}</div>
     </div>
   )
 }

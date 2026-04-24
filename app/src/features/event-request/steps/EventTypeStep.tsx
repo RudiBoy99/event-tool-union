@@ -15,7 +15,7 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={!selected}>
-      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.eventType.title')}</h1>
+      <h1 className="display-xl text-3xl md:text-4xl mb-8">{t('steps.eventType.title')}</h1>
       <Controller
         name="eventType"
         control={control}
@@ -26,13 +26,16 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
                 key={type}
                 onClick={() => field.onChange(type)}
                 className={cn(
-                  'p-5 rounded-md border text-left transition',
+                  'p-5 text-left transition-all duration-200',
                   field.value === type
-                    ? 'border-[var(--color-brand)] bg-[var(--color-brand-soft)]'
-                    : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]',
+                    ? 'bg-[var(--color-brand)] text-black'
+                    : 'border border-white/15 bg-white/[0.02] hover:bg-white/[0.04] text-white',
                 )}
               >
-                <div className="font-extrabold text-sm uppercase tracking-wider">
+                <div
+                  className="font-black text-sm uppercase tracking-wider"
+                  style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                >
                   {t(`steps.eventType.${type}`)}
                 </div>
               </button>

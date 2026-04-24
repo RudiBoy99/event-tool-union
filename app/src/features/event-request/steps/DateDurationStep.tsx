@@ -66,9 +66,9 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={result?.status === 'full'}>
-      <h1 className="display-xl text-2xl md:text-3xl mb-6">
+      <h1 className="display-xl text-3xl md:text-4xl mb-8">
         {t('steps.date.title').split(' ').slice(0, -1).join(' ')}{' '}
-        <span className="text-[var(--color-brand)]">
+        <span style={{ color: 'var(--color-brand)' }}>
           {t('steps.date.title').split(' ').slice(-1)}
         </span>
       </h1>
@@ -88,7 +88,7 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
 
       <div className="mb-6">
         <Label className="label-caps">{t('steps.date.duration')}</Label>
-        <div className="mt-2 flex items-center gap-1 rounded-full border border-white/20 focus-within:border-[var(--color-brand)] focus-within:bg-[var(--color-brand-soft)] transition w-fit">
+        <div className="mt-2 flex items-center gap-1 border border-white/15 focus-within:border-[var(--color-brand)] transition w-fit">
           <input
             type="number"
             step="0.5"
@@ -109,7 +109,7 @@ export function DateDurationStep({ step, onBack, onNext }: Props) {
                 setValue('dateTime.durationMinutes', Math.round(h * 60))
               }
             }}
-            className="w-[96px] h-11 bg-transparent pl-4 pr-1 text-base font-semibold text-white placeholder:text-white/40 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+            className="w-[96px] h-11 bg-white/5 pl-4 pr-1 text-base font-semibold text-white placeholder:text-white/40 focus:outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
           />
           <span className="pr-4 text-xs text-white/60">h</span>
         </div>

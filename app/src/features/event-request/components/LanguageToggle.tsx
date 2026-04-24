@@ -1,20 +1,29 @@
 import { useTranslation } from 'react-i18next'
-import { cn } from '@/lib/utils'
 
 export function LanguageToggle() {
   const { i18n } = useTranslation()
   const active = i18n.language.startsWith('en') ? 'en' : 'de'
-  const btn = (lang: 'de' | 'en') =>
-    cn(
-      'px-3 py-1 text-[10px] tracking-[0.1em] uppercase rounded-full border transition',
-      active === lang
-        ? 'bg-[var(--color-brand)] text-black border-transparent'
-        : 'border-white/20 text-white/70 hover:text-white',
-    )
+
   return (
-    <div className="flex gap-2">
-      <button className={btn('de')} onClick={() => i18n.changeLanguage('de')}>DE</button>
-      <button className={btn('en')} onClick={() => i18n.changeLanguage('en')}>EN</button>
+    <div className="flex items-center gap-0">
+      {(['de', 'en'] as const).map((lang, idx) => (
+        <>
+          {idx > 0 && (
+            <span key={`sep-${lang}`} className="opacity-20 mx-1.5 text-[10px]">|</span>
+          )}
+          <button
+            key={lang}
+            onClick={() => i18n.changeLanguage(lang)}
+            className="text-[10px] font-semibold tracking-[0.12em] uppercase transition-colors pb-0.5"
+            style={{
+              opacity: active === lang ? 1 : 0.4,
+              borderBottom: active === lang ? '1px solid currentColor' : '1px solid transparent',
+            }}
+          >
+            {lang.toUpperCase()}
+          </button>
+        </>
+      ))}
     </div>
   )
 }

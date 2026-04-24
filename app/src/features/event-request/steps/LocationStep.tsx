@@ -14,7 +14,7 @@ export function LocationStep({ step, onBack, onNext }: Props) {
 
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={!selected}>
-      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.location.title')}</h1>
+      <h1 className="display-xl text-3xl md:text-4xl mb-8">{t('steps.location.title')}</h1>
       <Controller
         name="location"
         control={control}
@@ -25,13 +25,18 @@ export function LocationStep({ step, onBack, onNext }: Props) {
                 key={loc.id}
                 onClick={() => field.onChange(loc.id)}
                 className={cn(
-                  'text-left p-5 rounded-md transition border',
+                  'text-left p-5 transition-all duration-200',
                   field.value === loc.id
-                    ? 'border-[var(--color-brand)] bg-[var(--color-brand-soft)]'
-                    : 'border-white/10 bg-white/[0.02] hover:bg-white/[0.04]',
+                    ? 'bg-[var(--color-brand)] text-black'
+                    : 'border border-white/15 bg-white/[0.02] hover:bg-white/[0.04] text-white',
                 )}
               >
-                <div className="font-extrabold text-lg">{loc.name}</div>
+                <div
+                  className="font-black text-lg uppercase tracking-wide"
+                  style={{ fontFamily: 'Archivo Black, sans-serif' }}
+                >
+                  {loc.name}
+                </div>
               </button>
             ))}
           </div>

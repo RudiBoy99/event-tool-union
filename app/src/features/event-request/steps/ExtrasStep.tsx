@@ -29,11 +29,12 @@ function ToggleGroup({ title, path, keys, labelPrefix }: {
             key={k}
             onClick={() => toggle(k)}
             className={cn(
-              'px-4 py-2 text-xs font-semibold rounded-full border transition',
+              'px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-all duration-200',
               values[k]
-                ? 'bg-[var(--color-brand)] text-black border-transparent'
-                : 'border-white/20 text-white/80 hover:text-white',
+                ? 'text-black'
+                : 'border border-white/20 text-white/80 hover:text-white hover:border-white/40',
             )}
+            style={values[k] ? { background: 'var(--color-brand)' } : {}}
           >
             {t(`${labelPrefix}.${k}`)}
           </button>
@@ -47,7 +48,7 @@ export function ExtrasStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()
   return (
     <StepShell currentStep={step} onBack={onBack} onNext={onNext}>
-      <h1 className="display-xl text-2xl md:text-3xl mb-6">{t('steps.extras.title')}</h1>
+      <h1 className="display-xl text-3xl md:text-4xl mb-8">{t('steps.extras.title')}</h1>
       <ToggleGroup title={t('steps.extras.gastro')} path="gastro" keys={GASTRO_KEYS} labelPrefix="steps.extras" />
       <ToggleGroup title={t('steps.extras.rooms')} path="rooms" keys={ROOM_KEYS} labelPrefix="steps.extras" />
       <ToggleGroup title={t('steps.extras.otherExtras')} path="extras" keys={EXTRA_KEYS} labelPrefix="steps.extras" />
