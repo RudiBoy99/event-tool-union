@@ -46,6 +46,8 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
   const sports = watch('sports')
 
   const availableSports = useMemo(() => {
+    // If no location yet (new flow: location is picked after sport), show all sports
+    if (!location) return ['padel', 'tennis', 'golf', 'pball', 'tabletennis']
     const loc = LOCATIONS[location]
     const keys = Object.keys(loc?.sports ?? {})
     const families = new Set<string>()

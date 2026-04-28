@@ -16,6 +16,9 @@ export const de = {
     contact: {
       title: 'Wie erreichen wir dich?',
       name: 'Name', company: 'Firma (optional)', email: 'E-Mail', phone: 'Telefon', language: 'Sprache',
+      consentTitle: 'Datenschutz-Hinweis',
+      consent: 'Mit \'Weiter\' speicherst du deine Angaben bei Union Sport. Wir melden uns auch, wenn du die Anfrage später nicht abschliesst.',
+      privacyLink: 'Datenschutzerklärung',
     },
     location: {
       title: 'Wo steigt\'s?',

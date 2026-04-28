@@ -29,10 +29,10 @@ export function EventRequestWizard() {
     <FormProvider {...methods}>
       <AnimatePresence mode="wait">
         {nav.step === 1 && <ContactStep key="1" step={1} onBack={nav.back} onNext={nav.next} />}
-        {nav.step === 2 && <LocationStep key="2" step={2} onBack={nav.back} onNext={nav.next} />}
-        {nav.step === 3 && <DateDurationStep key="3" step={3} onBack={nav.back} onNext={nav.next} />}
-        {nav.step === 4 && <EventTypeStep key="4" step={4} onBack={nav.back} onNext={nav.next} />}
-        {nav.step === 5 && <AttendeesSportStep key="5" step={5} onBack={nav.back} onNext={nav.next} />}
+        {nav.step === 2 && <EventTypeStep key="2" step={2} onBack={nav.back} onNext={nav.next} />}
+        {nav.step === 3 && <AttendeesSportStep key="3" step={3} onBack={nav.back} onNext={nav.next} />}
+        {nav.step === 4 && <LocationStep key="4" step={4} onBack={nav.back} onNext={nav.next} />}
+        {nav.step === 5 && <DateDurationStep key="5" step={5} onBack={nav.back} onNext={nav.next} />}
         {nav.step === 6 && <ExtrasStep key="6" step={6} onBack={nav.back} onNext={nav.next} />}
         {nav.step === 7 && (
           <ReviewSubmitStep

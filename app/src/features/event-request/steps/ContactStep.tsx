@@ -58,6 +58,23 @@ export function ContactStep({ step, onBack, onNext }: Props) {
           {errors.contact?.phone && <p className="text-red-400 text-xs mt-1">{errors.contact.phone.message}</p>}
         </div>
       </div>
+
+      <div className="mt-6 pt-5 border-t border-white/10">
+        <div className="text-[10px] tracking-[0.15em] uppercase text-white/45 font-semibold mb-1.5">
+          {t('steps.contact.consentTitle')}
+        </div>
+        <p className="text-[12px] leading-[1.55] text-white/55">
+          {t('steps.contact.consent')}{' '}
+          <a
+            href="https://www.union-sport.ch/datenschutz"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline decoration-[var(--color-brand)] decoration-2 underline-offset-2 hover:text-white"
+          >
+            {t('steps.contact.privacyLink')}
+          </a>
+        </p>
+      </div>
     </StepShell>
   )
 }
