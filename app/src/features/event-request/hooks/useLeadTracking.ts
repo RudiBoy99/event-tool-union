@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from 'react'
-import { useFormContext } from 'react-hook-form'
 import type { EventRequestData } from '../schema'
 
 const STORAGE_KEY = 'union-sport-lead-id'
@@ -30,8 +29,7 @@ export function resetLeadId() {
   }
 }
 
-export function useLeadTracking() {
-  const { getValues } = useFormContext<EventRequestData>()
+export function useLeadTracking(getValues: () => EventRequestData) {
   const leadIdRef = useRef<string>('')
 
   useEffect(() => {

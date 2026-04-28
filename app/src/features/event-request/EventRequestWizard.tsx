@@ -20,7 +20,7 @@ export function EventRequestWizard() {
     defaultValues: emptyEventRequest,
   })
   const nav = useStepNavigation(7)
-  const { trackLead } = useLeadTracking()
+  const { trackLead } = useLeadTracking(methods.getValues)
 
   const onStepNext = (currentStep: number) => async () => {
     await trackLead(currentStep)
