@@ -6,7 +6,6 @@ import { QuarterCircle } from '@/components/ui/quarter-circle'
 import { HalftoneImage } from '@/components/ui/halftone-image'
 
 const PADEL_IMG = '/images/union-padel-01.jpg'
-const SPORT_IMG = '/images/union-padel-01.jpg'
 
 export function HeroScreen() {
   const { t } = useTranslation()
