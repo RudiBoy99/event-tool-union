@@ -1,195 +1,221 @@
-import { useTranslation } from 'react-i18next'
+import { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { motion } from 'framer-motion'
+import { useTranslation } from 'react-i18next'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { LanguageToggle } from '../components/LanguageToggle'
-import { QuarterCircle } from '@/components/ui/quarter-circle'
-import { HalftoneImage } from '@/components/ui/halftone-image'
 
-const PADEL_IMG = '/images/union-padel-01.jpg'
+const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
 export function HeroScreen() {
   const { t } = useTranslation()
   const nav = useNavigate()
+  const reduceMotion = useReducedMotion()
+  const [scrolled, setScrolled] = useState(false)
+  const [transitioning, setTransitioning] = useState(false)
+  const [parallax, setParallax] = useState({ x: 0, y: 0 })
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 10)
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
+  useEffect(() => {
+    if (reduceMotion) videoRef.current?.pause()
+  }, [reduceMotion])
+
+  useEffect(() => {
+    if (reduceMotion) return
+    const isDesktop = window.matchMedia('(min-width: 1024px) and (hover: hover)').matches
+    if (!isDesktop) return
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 18
+      const y = (e.clientY / window.innerHeight - 0.5) * 18
+      setParallax({ x, y })
+    }
+    window.addEventListener('mousemove', onMove, { passive: true })
+    return () => window.removeEventListener('mousemove', onMove)
+  }, [reduceMotion])
+
+  const handleCta = () => {
+    if (reduceMotion) {
+      nav('/request?step=1')
+      return
+    }
+    setTransitioning(true)
+    window.setTimeout(() => nav('/request?step=1'), 550)
+  }
+
+  const grainBg =
+    "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='240' height='240'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.92' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")"
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col overflow-hidden">
-      {/* Header */}
-      <header className="flex items-center justify-between px-6 md:px-10 py-4 border-b border-white/[0.08] flex-shrink-0">
-        <div className="flex items-center gap-2.5">
-          <img src="/logos/UnionSport_negativ-auf-Schwarz_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
-        </div>
+    <div className="relative min-h-screen w-full overflow-hidden bg-black text-white">
+      <motion.div
+        className="absolute inset-0 z-0"
+        initial={reduceMotion ? false : { opacity: 0, scale: 1.05 }}
+        animate={transitioning ? { opacity: 0, scale: 1.15 } : { opacity: 1, scale: 1 }}
+        transition={
+          transitioning
+            ? { duration: 0.6, ease: EASE_OUT_EXPO }
+            : {
+                opacity: { duration: 1.2, ease: EASE_OUT_EXPO },
+                scale: { duration: 4, ease: EASE_OUT_EXPO },
+              }
+        }
+      >
+        <video
+          ref={videoRef}
+          className="h-full w-full object-cover"
+          autoPlay={!reduceMotion}
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          poster="/videos/union-padel-hype-poster.jpg"
+          aria-hidden="true"
+        >
+          <source src="/videos/union-padel-hype.webm" type="video/webm" />
+          <source src="/videos/union-padel-hype.mp4" type="video/mp4" />
+        </video>
+      </motion.div>
+
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          background:
+            'linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.7) 100%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none z-[1]"
+        style={{
+          background:
+            'radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.5) 100%)',
+        }}
+      />
+      <div
+        aria-hidden
+        className="absolute inset-0 pointer-events-none z-[2] mix-blend-overlay"
+        style={{ opacity: 0.07, backgroundImage: grainBg }}
+      />
+
+      <header
+        className={`fixed top-0 left-0 right-0 z-30 flex items-center justify-between px-6 py-4 md:px-10 md:py-5 transition-[backdrop-filter,background-color] duration-300 ${
+          scrolled ? 'backdrop-blur-md bg-black/30' : ''
+        }`}
+      >
+        <img
+          src="/logos/UnionSport_negativ-auf-Schwarz_RGB.png"
+          alt="Union Sport"
+          className="h-7 md:h-8 w-auto"
+        />
         <LanguageToggle />
       </header>
 
-      {/* Main hero area */}
-      <main className="flex-1 grid grid-cols-1 lg:grid-cols-2 min-h-0">
-        {/* Left column: editorial content */}
-        <div className="flex flex-col justify-center px-6 md:px-10 py-10 md:py-16 relative">
-          {/* Eyebrow label */}
+      <div
+        className="absolute bottom-0 right-0 pointer-events-none z-10"
+        style={{
+          transform: `translate(${parallax.x}px, ${parallax.y}px)`,
+          transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+        }}
+      >
+        <motion.div
+          aria-hidden
+          style={{
+            width: 'min(22vw, 320px)',
+            height: 'min(22vw, 320px)',
+            background: 'var(--color-brand)',
+            borderRadius: '100% 0 0 0',
+            transformOrigin: 'bottom right',
+          }}
+          initial={reduceMotion ? false : { scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: 'spring', stiffness: 60, damping: 18, delay: 0.9 }}
+        />
+      </div>
+
+      <main className="relative z-20 flex min-h-screen items-center px-6 md:px-12 lg:px-20">
+        <div className="max-w-[720px] flex flex-col gap-6 md:gap-8">
           <motion.div
-            initial={{ opacity: 0, y: 8 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.1 }}
-            className="label-caps text-[var(--color-brand)] mb-6"
+            transition={{ duration: 0.6, delay: 0.15, ease: EASE_OUT_EXPO }}
+            className="text-[var(--color-brand)] text-[11px] md:text-xs font-bold uppercase"
+            style={{
+              letterSpacing: '0.22em',
+              fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
+            }}
           >
             {t('hero.eyebrow')}
           </motion.div>
 
-          {/* Main headline — Archivo Black, flush left, uppercase */}
           <motion.h1
-            initial={{ opacity: 0, y: 16 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="display-xl text-4xl sm:text-5xl md:text-6xl mb-8 max-w-lg"
+            transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT_EXPO }}
+            className="font-black uppercase"
+            style={{
+              fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
+              fontSize: 'clamp(40px, 9vw, 128px)',
+              lineHeight: 0.92,
+              letterSpacing: '-0.02em',
+            }}
           >
             {t('hero.title1')}{' '}
-            <span className="text-[var(--color-brand)]">{t('hero.titleAccent')}</span>{' '}
+            <span style={{ color: 'var(--color-brand)' }}>{t('hero.titleAccent')}</span>
+            <br />
             {t('hero.title2')}{' '}
-            <span className="text-[var(--color-brand)]">{t('hero.titleUnderline')}</span>
+            <span style={{ color: 'var(--color-brand)' }}>{t('hero.titleUnderline')}</span>
           </motion.h1>
 
-          {/* 2×2 brand grid */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.35 }}
-            className="grid grid-cols-2 mb-10 w-fit"
-          >
-            {/* Cell 1: Orange solid with centered ball icon */}
-            <div
-              className="w-24 h-24 md:w-32 md:h-32 bg-[var(--color-brand)] flex items-center justify-center"
-            >
-              <img src="/logos/UnionSport_Ball_RGB.png" alt="" className="w-[55%] h-auto" />
-            </div>
-            {/* Cell 2: Halftone padel image clipped to quarter-circle */}
-            <div className="w-24 h-24 md:w-32 md:h-32 relative overflow-hidden bg-[#111]">
-              <HalftoneImage src={PADEL_IMG} grade={2} className="absolute inset-0 w-full h-full" />
-              {/* Quarter-circle overlay mask — top-right orientation */}
-              <div
-                className="absolute inset-0 bg-black"
-                style={{ borderRadius: '0 0 0 100%' }}
-              />
-            </div>
-            {/* Cell 3: Black with sand quarter-circle bottom-right */}
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-black relative overflow-hidden border border-white/[0.08]">
-              <QuarterCircle
-                size="100%"
-                color="var(--color-sand)"
-                rotation={180}
-                className="absolute inset-0"
-              />
-            </div>
-            {/* Cell 4: Sand with small orange quarter-circle */}
-            <div className="w-24 h-24 md:w-32 md:h-32 bg-[var(--color-sand)] relative overflow-hidden flex items-center justify-center">
-              <QuarterCircle
-                size="60%"
-                color="var(--color-brand)"
-                rotation={270}
-              />
-            </div>
-          </motion.div>
-
-          {/* Stats strip */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5, delay: 0.5 }}
-            className="flex flex-wrap gap-6 text-left mb-10"
-          >
-            {[
-              { v: '3', l: t('hero.stats.locations') },
-              { v: '5', l: t('hero.stats.sports') },
-              { v: '24h', l: t('hero.stats.response') },
-            ].map((s, i) => (
-              <div key={i}>
-                <div
-                  className="text-2xl font-black text-[var(--color-brand)] leading-none"
-                  style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
-                >
-                  {s.v}
-                </div>
-                <div className="label-caps mt-1.5">{s.l}</div>
-              </div>
-            ))}
-          </motion.div>
-
-          {/* CTA button — flat solid, no glass */}
-          <motion.div
-            initial={{ opacity: 0, y: 8 }}
+          <motion.p
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: 0.6 }}
-            className="flex flex-col sm:flex-row gap-3"
+            transition={{ duration: 0.6, delay: 0.55, ease: EASE_OUT_EXPO }}
+            className="text-white/85 text-base md:text-lg max-w-md leading-relaxed"
+          >
+            {t('hero.subtitle')}
+          </motion.p>
+
+          <motion.div
+            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6, delay: 0.75, ease: EASE_OUT_EXPO }}
+            className="mt-2"
           >
             <button
-              onClick={() => nav('/request?step=1')}
-              className="inline-flex items-center gap-3 px-8 py-4 bg-[var(--color-brand)] text-black font-black text-sm uppercase tracking-[0.08em] hover:brightness-110 transition-all duration-200"
-              style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
+              onClick={handleCta}
+              className="group inline-flex items-center gap-4 bg-[var(--color-brand)] px-10 py-5 text-black font-black text-sm uppercase transition-[filter] duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-black w-full sm:w-auto justify-center sm:justify-start"
+              style={{
+                fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
+                letterSpacing: '0.08em',
+              }}
             >
-              {t('hero.ctaPrimary').replace(' →', '')}
-              <span className="opacity-80">→</span>
+              <span>{t('hero.ctaPrimary').replace(' →', '')}</span>
+              <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
             </button>
           </motion.div>
         </div>
-
-        {/* Right column: large halftone image in quarter-circle */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="hidden lg:flex items-center justify-center p-10 relative"
-        >
-          {/* Large quarter-circle image, anchored bottom-right */}
-          <div
-            className="relative overflow-hidden bg-[#111]"
-            style={{
-              width: 'min(55vw, 520px)',
-              height: 'min(55vw, 520px)',
-              borderRadius: '100% 0 0 0',
-            }}
-          >
-            <video
-              className="absolute inset-0 w-full h-full object-cover"
-              autoPlay
-              muted
-              loop
-              playsInline
-              preload="metadata"
-              poster="/videos/union-padel-hype-poster.jpg"
-              aria-hidden="true"
-            >
-              <source src="/videos/union-padel-hype.webm" type="video/webm" />
-              <source src="/videos/union-padel-hype.mp4" type="video/mp4" />
-            </video>
-            {/* Subtle dark overlay for brand consistency */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.25) 100%)' }}
-            />
-            {/* Orange accent corner */}
-            <div
-              className="absolute bottom-0 right-0 bg-[var(--color-brand)]"
-              style={{ width: '20%', height: '20%' }}
-            />
-          </div>
-
-          {/* Decorative quarter-circle behind */}
-          <div
-            className="absolute bottom-0 right-0 pointer-events-none"
-            style={{
-              width: '35vw',
-              height: '35vw',
-              maxWidth: '380px',
-              maxHeight: '380px',
-              borderRadius: '100% 0 0 0',
-              background: 'var(--color-brand)',
-              opacity: 0.12,
-            }}
-          />
-        </motion.div>
       </main>
 
-      {/* Bottom accent line */}
-      <div className="h-1 bg-[var(--color-brand)] flex-shrink-0" />
+      <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--color-brand)] z-10" />
+
+      <AnimatePresence>
+        {transitioning && (
+          <motion.div
+            key="curtain"
+            className="fixed inset-0 z-50 pointer-events-none bg-black"
+            initial={{ clipPath: 'circle(0% at 100% 100%)' }}
+            animate={{ clipPath: 'circle(150% at 100% 100%)' }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          />
+        )}
+      </AnimatePresence>
     </div>
   )
 }
