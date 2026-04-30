@@ -10,7 +10,7 @@ export const en = {
     ctaSecondary: 'Examples',
     stats: { locations: 'Locations', sports: 'Sports', people: 'People/Event', response: 'Response' },
   },
-  nav: { back: '← Back', next: 'Next →', submit: 'Send request' },
+  nav: { back: '← Back', next: 'Next', submit: 'Send request' },
   steps: {
     indicator: 'Step {{n}} / 07',
     contact: {
