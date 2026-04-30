@@ -1,5 +1,191 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import { google } from 'googleapis'
+import { Resend } from 'resend'
+
+const LOCATION_LABELS: Record<string, string> = {
+  muenchenstein: 'Union Sport Münchenstein',
+  hafen: 'Union Padel — Basel Hafen',
+  wolf: 'Union PickleBall — Basel Wolf',
+}
+
+const EVENT_TYPE_LABELS: Record<string, string> = {
+  birthday: 'Geburtstag',
+  corporate: 'Firmenanlass',
+  teambuilding: 'Teambuilding',
+  tournament: 'Turnier',
+  camp: 'Camp',
+  school: 'Schule / Jugend',
+  court_only: 'Court-Only',
+}
+
+function fmtFlags(obj: any, dict?: Record<string, string>): string {
+  if (!obj || typeof obj !== 'object') return '—'
+  const trueKeys = Object.entries(obj).filter(([_, v]) => v === true).map(([k]) => k)
+  if (trueKeys.length === 0) return '—'
+  return trueKeys.map((k) => dict?.[k] ?? k).join(', ')
+}
+
+const GASTRO_LABELS: Record<string, string> = {
+  bistro: 'Bistro',
+  drinks: 'Getränkepauschale',
+  apero: 'Apéro',
+  foodtruck: 'Foodtruck',
+  externalCatering: 'Externes Catering',
+}
+const ROOM_LABELS: Record<string, string> = {
+  lounge: 'Eventlounge',
+  meetingRoom: 'Meetingraum',
+}
+const EXTRA_LABELS: Record<string, string> = {
+  coach: 'Coach / Trainer',
+  equipment: 'Equipment-Leihe',
+  photographer: 'Fotograf',
+  music: 'Musik / DJ',
+  trophies: 'Pokale',
+}
+const MEETING_LABELS: Record<string, string> = {
+  none: 'Nicht nötig',
+  call: 'Telefon-Call',
+  onsite: 'Vor Ort',
+}
+
+function buildSubmissionEmail(d: any, leadId: string): { subject: string; html: string; text: string } {
+  const name = d.contact?.name || '—'
+  const company = d.contact?.company || '—'
+  const email = d.contact?.email || '—'
+  const phone = d.contact?.phone || '—'
+  const eventType = EVENT_TYPE_LABELS[d.eventType] || d.eventType || '—'
+  const location = LOCATION_LABELS[d.location] || d.location || '—'
+  const date = d.dateTime?.date || '—'
+  const startTime = d.dateTime?.startTime || '—'
+  const duration = d.dateTime?.durationMinutes ? `${(d.dateTime.durationMinutes / 60).toFixed(1)} h` : '—'
+  const personen = d.attendees?.count ?? '—'
+  const ageGroup = d.attendees?.ageGroup || '—'
+  const level = d.attendees?.level || '—'
+  const sportsList = Array.isArray(d.sports) && d.sports.length
+    ? d.sports.map((s: any) => `${s.sport} (${s.courts} Court${s.courts === 1 ? '' : 's'})`).join(', ')
+    : '—'
+  const gastro = fmtFlags(d.gastro, GASTRO_LABELS)
+  const rooms = fmtFlags(d.rooms, ROOM_LABELS)
+  const extras = fmtFlags(d.extras, EXTRA_LABELS)
+  const meetingWish = MEETING_LABELS[d.meeting?.wish] || d.meeting?.wish || '—'
+  const meetingNote = d.meeting?.note || ''
+
+  const subject = `Neue Event-Anfrage — ${name}${company !== '—' ? ` (${company})` : ''}`
+
+  const sectionStyle = 'margin: 0 0 24px;'
+  const labelStyle = 'font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: #888; margin: 0 0 4px;'
+  const valueStyle = 'font-size: 15px; color: #0a0a0a; margin: 0; line-height: 1.4;'
+
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="margin:0; padding:0; background:#FFF1E5; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;">
+  <div style="max-width: 640px; margin: 0 auto; padding: 32px 24px; background: #FFF1E5;">
+    <div style="background: #FF9829; padding: 24px; margin-bottom: 24px;">
+      <div style="font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: #0a0a0a; font-weight: 700;">Union Sport · Events</div>
+      <h1 style="font-size: 28px; font-weight: 900; color: #0a0a0a; margin: 8px 0 0; letter-spacing: -0.02em; text-transform: uppercase;">Neue Event-Anfrage</h1>
+    </div>
+
+    <div style="background: #fff; padding: 24px;">
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Kontakt</p>
+        <p style="${valueStyle}"><strong>${name}</strong>${company !== '—' ? ` · ${company}` : ''}</p>
+        <p style="${valueStyle}"><a href="mailto:${email}" style="color: #FF9829;">${email}</a> · <a href="tel:${phone}" style="color: #FF9829;">${phone}</a></p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Event-Typ</p>
+        <p style="${valueStyle}">${eventType}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Datum & Dauer</p>
+        <p style="${valueStyle}">${date} · ${startTime} · ${duration}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Standort</p>
+        <p style="${valueStyle}">${location}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Teilnehmer & Sport</p>
+        <p style="${valueStyle}">${personen} Personen · ${ageGroup} · Level ${level}</p>
+        <p style="${valueStyle}">${sportsList}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Gastro</p>
+        <p style="${valueStyle}">${gastro}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Räume</p>
+        <p style="${valueStyle}">${rooms}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Weitere Extras</p>
+        <p style="${valueStyle}">${extras}</p>
+      </div>
+
+      <div style="${sectionStyle}">
+        <p style="${labelStyle}">Persönliches Gespräch</p>
+        <p style="${valueStyle}">${meetingWish}${meetingNote ? `<br><em style="color:#666;">«${meetingNote}»</em>` : ''}</p>
+      </div>
+
+      <div style="border-top: 1px solid #eee; padding-top: 16px; margin-top: 32px;">
+        <p style="font-size: 11px; color: #888; margin: 0;">Lead-ID: <code>${leadId}</code></p>
+        <p style="font-size: 11px; color: #888; margin: 4px 0 0;">Vollständige Lead-Historie im Google Sheet.</p>
+      </div>
+    </div>
+  </div>
+</body></html>`
+
+  const text = `Neue Event-Anfrage — ${name}
+
+KONTAKT
+${name}${company !== '—' ? ` · ${company}` : ''}
+${email} · ${phone}
+
+EVENT-TYP: ${eventType}
+DATUM: ${date} · ${startTime} · ${duration}
+STANDORT: ${location}
+
+TEILNEHMER & SPORT
+${personen} Personen · ${ageGroup} · Level ${level}
+${sportsList}
+
+GASTRO: ${gastro}
+RÄUME: ${rooms}
+EXTRAS: ${extras}
+
+PERSÖNLICHES GESPRÄCH: ${meetingWish}${meetingNote ? `\n«${meetingNote}»` : ''}
+
+Lead-ID: ${leadId}`
+
+  return { subject, html, text }
+}
+
+async function sendNotificationEmail(payload: LeadPayload): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY
+  const to = process.env.EVENT_NOTIFICATION_TO
+  const from = process.env.EVENT_NOTIFICATION_FROM
+  if (!apiKey || !to || !from) {
+    console.warn('Resend env vars missing, skipping email')
+    return
+  }
+  const resend = new Resend(apiKey)
+  const { subject, html, text } = buildSubmissionEmail(payload.data || {}, payload.leadId)
+  await resend.emails.send({
+    from: `Union Sport Events <${from}>`,
+    to: [to],
+    replyTo: payload.data?.contact?.email || undefined,
+    subject,
+    html,
+    text,
+  })
+}
 
 const HEADERS = [
   'leadId', 'Erstellt', 'Aktualisiert', 'Status', 'Schritt',
@@ -131,6 +317,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         valueInputOption: 'RAW',
         requestBody: { values: [row] },
       })
+
+      if (payload.status === 'SUBMITTED') {
+        try { await sendNotificationEmail(payload) } catch (e) { console.error('email send failed (update path):', e) }
+      }
+
       return res.status(200).json({ ok: true, action: 'updated', row: existingRow })
     } else {
       const row = rowFromPayload(payload, true)
@@ -140,6 +331,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
         valueInputOption: 'RAW',
         requestBody: { values: [row] },
       })
+
+      if (payload.status === 'SUBMITTED') {
+        try { await sendNotificationEmail(payload) } catch (e) { console.error('email send failed (insert path):', e) }
+      }
+
       return res.status(200).json({ ok: true, action: 'inserted' })
     }
   } catch (err: any) {
