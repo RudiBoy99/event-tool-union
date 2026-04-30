@@ -10,7 +10,7 @@ import { LOCATIONS } from '../data/locations'
 import { DateTimeInput } from '@/components/ui/date-time-input'
 import { Label } from '@/components/ui/label'
 
-interface Props { step: number; onBack?: () => void; onNext: () => void }
+interface Props { step: number; onBack: () => void; onNext: () => void }
 
 function formatDate(d: Date): string {
   const y = d.getFullYear()

@@ -10,7 +10,7 @@ const WIZARD_IMG = '/images/union-padel-01.jpg'
 interface Props {
   currentStep: number
   children: ReactNode
-  onBack?: () => void
+  onBack: () => void
   onNext?: () => void
   nextDisabled?: boolean
   nextLabel?: string
@@ -97,8 +97,7 @@ export function StepShell({
                 <div className="flex justify-between mt-8 md:mt-10">
                   <button
                     onClick={onBack}
-                    disabled={!onBack}
-                    className="px-5 py-2.5 text-[11px] font-semibold tracking-[0.1em] uppercase transition-colors disabled:opacity-30"
+                    className="px-5 py-2.5 text-[11px] font-semibold tracking-[0.1em] uppercase transition-colors"
                     style={{
                       border: isSand ? '1px solid rgba(0,0,0,0.2)' : '1px solid rgba(255,255,255,0.18)',
                       color: isSand ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)',

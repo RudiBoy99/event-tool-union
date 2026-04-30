@@ -19,6 +19,54 @@ export const de = {
       consentTitle: 'Datenschutz-Hinweis',
       consent: 'Mit \'Weiter\' speicherst du deine Angaben bei Union Sport. Wir melden uns auch, wenn du die Anfrage später nicht abschliesst.',
       privacyLink: 'Datenschutzerklärung',
+      privacy: {
+        title: 'Datenschutzerklärung',
+        open: 'Datenschutzerklärung anzeigen',
+        download: 'Als PDF herunterladen',
+        close: 'Schliessen',
+        sections: {
+          responsible: {
+            title: '1. Verantwortliche Stelle',
+            body: 'Union Sport AG\nHauptstrasse 1\n4142 Münchenstein\nSchweiz\n\nE-Mail: events@union-sport.ch',
+          },
+          data: {
+            title: '2. Erhobene Daten',
+            body: 'Im Rahmen der Event-Anfrage bearbeiten wir folgende Daten: Name, Firma, E-Mail-Adresse, Telefonnummer, Sprache sowie sämtliche Anfragedetails (Veranstaltungstyp, Datum, Teilnehmerzahl, Sportart, Standortwahl, Extras-Wünsche, freie Notizen).',
+          },
+          purpose: {
+            title: '3. Zweck der Datenbearbeitung',
+            body: 'Die Daten dienen der Bearbeitung Ihrer Event-Anfrage, der Erstellung eines individuellen Angebots, der Kontaktaufnahme zur Klärung von Details sowie der internen Auswertung zur Verbesserung des Anfrageprozesses.',
+          },
+          legal: {
+            title: '4. Rechtsgrundlage',
+            body: 'Die Bearbeitung beruht auf Art. 6 Abs. 1 lit. b und f DSGVO sowie Art. 31 Abs. 2 lit. a revDSG (Vertragserfüllung und berechtigte Interessen).',
+          },
+          retention: {
+            title: '5. Speicherdauer',
+            body: 'Anfragedaten werden bis zu 24 Monate nach dem letzten Kontakt aufbewahrt und danach gelöscht oder anonymisiert.',
+          },
+          sharing: {
+            title: '6. Datenweitergabe',
+            body: 'Eine Übermittlung erfolgt ausschliesslich an Auftragsverarbeiter (Google LLC für die Speicherung in Google Sheets in der EU sowie Resend Inc. für die E-Mail-Zustellung) auf Basis von Standardvertragsklauseln. Es findet keine Weitergabe an Dritte zu Marketingzwecken statt.',
+          },
+          cookies: {
+            title: '7. Cookies & Tracking',
+            body: 'Aktuell werden keine Tracking-Cookies eingesetzt. Lokaler Speicher (localStorage) wird ausschliesslich zur Wiederherstellung unvollständiger Anfragen genutzt.',
+          },
+          rights: {
+            title: '8. Ihre Rechte',
+            body: 'Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung, Datenübertragbarkeit und Widerspruch sowie das Recht auf Beschwerde beim Eidgenössischen Datenschutz- und Öffentlichkeitsbeauftragten (EDÖB).',
+          },
+          contact: {
+            title: '9. Kontakt für Datenschutzanfragen',
+            body: 'events@union-sport.ch',
+          },
+          updated: {
+            title: '10. Stand',
+            body: 'April 2026',
+          },
+        },
+      },
     },
     location: {
       title: 'Wo steigt\'s?',

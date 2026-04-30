@@ -19,6 +19,54 @@ export const en = {
       consentTitle: 'Data protection notice',
       consent: 'By clicking \'Next\' you save your contact details with Union Sport. We\'ll get in touch even if you don\'t complete the request later.',
       privacyLink: 'Privacy policy',
+      privacy: {
+        title: 'Privacy Policy',
+        open: 'Show privacy policy',
+        download: 'Download as PDF',
+        close: 'Close',
+        sections: {
+          responsible: {
+            title: '1. Data Controller',
+            body: 'Union Sport AG\nHauptstrasse 1\n4142 Münchenstein\nSwitzerland\n\nEmail: events@union-sport.ch',
+          },
+          data: {
+            title: '2. Data Collected',
+            body: 'As part of the event request we process the following data: name, company, email address, phone number, language and all request details (event type, date, number of participants, sport, venue choice, extras, free-text notes).',
+          },
+          purpose: {
+            title: '3. Purpose of Processing',
+            body: 'The data is used to process your event request, create an individual offer, contact you to clarify details and for internal analysis to improve the request process.',
+          },
+          legal: {
+            title: '4. Legal Basis',
+            body: 'Processing is based on Art. 6(1)(b) and (f) GDPR as well as Art. 31(2)(a) revFADP (contract performance and legitimate interests).',
+          },
+          retention: {
+            title: '5. Retention Period',
+            body: 'Request data is stored for up to 24 months after the last contact and then deleted or anonymised.',
+          },
+          sharing: {
+            title: '6. Data Sharing',
+            body: 'Data is transferred only to processors (Google LLC for storage in Google Sheets within the EU and Resend Inc. for email delivery) on the basis of Standard Contractual Clauses. No data is shared with third parties for marketing purposes.',
+          },
+          cookies: {
+            title: '7. Cookies & Tracking',
+            body: 'No tracking cookies are currently in use. Local storage (localStorage) is used only to restore incomplete requests.',
+          },
+          rights: {
+            title: '8. Your Rights',
+            body: 'You have the right to access, rectification, deletion, restriction, data portability and objection as well as the right to lodge a complaint with the Swiss Federal Data Protection and Information Commissioner (FDPIC).',
+          },
+          contact: {
+            title: '9. Contact for Privacy Inquiries',
+            body: 'events@union-sport.ch',
+          },
+          updated: {
+            title: '10. Last Updated',
+            body: 'April 2026',
+          },
+        },
+      },
     },
     location: {
       title: 'Where?',

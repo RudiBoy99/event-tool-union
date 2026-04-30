@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils'
 
 const TYPES = ['birthday', 'corporate', 'teambuilding', 'tournament', 'camp', 'school', 'court_only'] as const
 
-interface Props { step: number; onBack?: () => void; onNext: () => void }
+interface Props { step: number; onBack: () => void; onNext: () => void }
 
 export function EventTypeStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()

@@ -1,15 +1,18 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFormContext } from 'react-hook-form'
 import type { EventRequestData } from '../schema'
 import { StepShell } from '../components/StepShell'
+import { PrivacyDialog } from '../components/PrivacyDialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
-interface Props { step: number; onBack?: () => void; onNext: () => void }
+interface Props { step: number; onBack: () => void; onNext: () => void }
 
 export function ContactStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()
   const { register, formState: { errors }, trigger } = useFormContext<EventRequestData>()
+  const [privacyOpen, setPrivacyOpen] = useState(false)
 
   const handleNext = async () => {
     const ok = await trigger('contact')
@@ -65,16 +68,16 @@ export function ContactStep({ step, onBack, onNext }: Props) {
         </div>
         <p className="text-[12px] leading-[1.55] text-white/55">
           {t('steps.contact.consent')}{' '}
-          <a
-            href="https://www.union-sport.ch/datenschutz"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline decoration-[var(--color-brand)] decoration-2 underline-offset-2 hover:text-white"
+          <button
+            type="button"
+            onClick={() => setPrivacyOpen(true)}
+            className="underline decoration-[var(--color-brand)] decoration-2 underline-offset-2 hover:text-white bg-transparent p-0 border-0 cursor-pointer text-[12px] leading-[1.55] text-white/55 hover:text-white"
           >
             {t('steps.contact.privacyLink')}
-          </a>
+          </button>
         </p>
       </div>
+      <PrivacyDialog open={privacyOpen} onClose={() => setPrivacyOpen(false)} />
     </StepShell>
   )
 }

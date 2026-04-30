@@ -5,7 +5,7 @@ import { StepShell } from '../components/StepShell'
 import { LOCATIONS } from '../data/locations'
 import { cn } from '@/lib/utils'
 
-interface Props { step: number; onBack?: () => void; onNext: () => void }
+interface Props { step: number; onBack: () => void; onNext: () => void }
 
 export function LocationStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()

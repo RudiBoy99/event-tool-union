@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils'
 
 const MEETING_OPTS = ['none', 'call', 'onsite'] as const
 
-interface Props { step: number; onBack?: () => void; onSubmit: () => void }
+interface Props { step: number; onBack: () => void; onSubmit: () => void }
 
 export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
   const { t } = useTranslation()

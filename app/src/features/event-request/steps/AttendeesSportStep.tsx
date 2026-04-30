@@ -36,7 +36,7 @@ const SPORT_BALL_ICONS: Record<string, string> = {
   tabletennis: '/logos/UnionTableTennis_Ball_RGB.png',
 }
 
-interface Props { step: number; onBack?: () => void; onNext: () => void }
+interface Props { step: number; onBack: () => void; onNext: () => void }
 
 export function AttendeesSportStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()

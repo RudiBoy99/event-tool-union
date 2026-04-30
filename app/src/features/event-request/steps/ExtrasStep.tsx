@@ -8,7 +8,7 @@ const GASTRO_KEYS = ['bistro', 'drinks', 'apero', 'foodtruck', 'externalCatering
 const ROOM_KEYS = ['lounge', 'meetingRoom'] as const
 const EXTRA_KEYS = ['coach', 'equipment', 'photographer', 'music', 'trophies'] as const
 
-interface Props { step: number; onBack?: () => void; onNext: () => void }
+interface Props { step: number; onBack: () => void; onNext: () => void }
 
 function ToggleGroup({ title, path, keys, labelPrefix }: {
   title: string
