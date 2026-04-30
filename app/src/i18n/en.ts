@@ -5,7 +5,7 @@ export const en = {
     titleAccent: 'Event.',
     title2: 'Our',
     titleUnderline: 'Court.',
-    subtitle: 'Padel, Tennis, Golf, Pickle-Ball — three locations in Basel. Request in 3 minutes, offer in 24 hours.',
+    subtitle: 'Padel, Tennis, Golf, Pickle-Ball — three locations in Basel. Request in 3 minutes.',
     ctaPrimary: 'Plan event →',
     ctaSecondary: 'Examples',
     stats: { locations: 'Locations', sports: 'Sports', people: 'People/Event', response: 'Response' },
