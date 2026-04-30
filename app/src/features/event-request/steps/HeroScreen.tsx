@@ -148,10 +148,23 @@ export function HeroScreen() {
               borderRadius: '100% 0 0 0',
             }}
           >
-            <HalftoneImage
-              src={SPORT_IMG}
-              grade={2}
-              className="absolute inset-0 w-full h-full"
+            <video
+              className="absolute inset-0 w-full h-full object-cover"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              poster="/videos/union-padel-hype-poster.jpg"
+              aria-hidden="true"
+            >
+              <source src="/videos/union-padel-hype.webm" type="video/webm" />
+              <source src="/videos/union-padel-hype.mp4" type="video/mp4" />
+            </video>
+            {/* Subtle dark overlay for brand consistency */}
+            <div
+              className="absolute inset-0 pointer-events-none"
+              style={{ background: 'linear-gradient(135deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0.0) 50%, rgba(0,0,0,0.25) 100%)' }}
             />
             {/* Orange accent corner */}
             <div
