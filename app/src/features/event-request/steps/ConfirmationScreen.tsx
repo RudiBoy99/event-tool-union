@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next'
 import { useMemo } from 'react'
 
-export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
+export function ConfirmationScreen({ onNew: _onNew }: { onNew: () => void }) {
   const { t } = useTranslation()
   const ref = useMemo(() => `ES-2026-${String(Math.floor(1000 + Math.random() * 9000))}`, [])
 
@@ -62,26 +62,18 @@ export function ConfirmationScreen({ onNew }: { onNew: () => void }) {
             {ref}
           </div>
 
-          {/* Action buttons */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* Action button */}
+          <div>
             <button
               onClick={() => window.location.assign('/')}
-              className="px-7 py-3 text-[11px] font-black uppercase tracking-[0.08em] border-2 border-black text-black hover:bg-black hover:text-white transition-all"
-              style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
-            >
-              {t('steps.confirmation.ctaHome')}
-            </button>
-            <button
-              onClick={onNew}
-              className="px-7 py-3 text-[11px] font-black uppercase tracking-[0.08em] hover:brightness-110 transition-all"
+              className="px-7 py-3 text-[11px] font-black uppercase tracking-[0.08em] hover:brightness-110 active:scale-[0.97] transition-all"
               style={{
                 fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
                 background: 'var(--color-brand)',
                 color: '#000000',
-                transition: 'background 400ms ease, filter 200ms ease',
               }}
             >
-              {t('steps.confirmation.ctaNew')}
+              {t('steps.confirmation.ctaHome')}
             </button>
           </div>
         </div>

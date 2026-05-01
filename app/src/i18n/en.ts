@@ -1,6 +1,6 @@
 export const en = {
   hero: {
-    eyebrow: 'B2B · Teambuilding · Tournament · Birthday',
+    eyebrow: 'Teambuilding · Tournament · Birthday',
     title1: 'Your',
     titleAccent: 'Event.',
     title2: 'Our',
@@ -120,8 +120,7 @@ export const en = {
     },
     confirmation: {
       title: 'Thanks!',
-      subtitle: 'Reference #{{ref}}. We\'ll reply with an offer within 24h.',
-      ctaNew: 'New request',
+      subtitle: 'Reference #{{ref}}. We\'ll get back to you!',
       ctaHome: 'Home',
     },
   },

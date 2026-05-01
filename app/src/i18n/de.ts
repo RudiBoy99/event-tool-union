@@ -1,6 +1,6 @@
 export const de = {
   hero: {
-    eyebrow: 'B2B · Teambuilding · Turnier · Geburtstag',
+    eyebrow: 'Teambuilding · Turnier · Geburtstag',
     title1: 'Dein',
     titleAccent: 'Event.',
     title2: 'Unser',
@@ -120,8 +120,7 @@ export const de = {
     },
     confirmation: {
       title: 'Danke!',
-      subtitle: 'Referenznummer #{{ref}}. Wir melden uns in 24 h mit deinem Angebot.',
-      ctaNew: 'Noch eine Anfrage',
+      subtitle: 'Referenznummer #{{ref}}. Wir melden uns bei dir!',
       ctaHome: 'Zur Übersicht',
     },
   },
