@@ -10,7 +10,7 @@ export const de = {
     ctaSecondary: 'Beispiele',
     stats: { locations: 'Standorte', sports: 'Sportarten', people: 'Personen/Event', response: 'Antwortzeit' },
   },
-  nav: { back: '← Zurück', next: 'Weiter', submit: 'Anfrage senden' },
+  nav: { back: '← Zurück', next: 'Weiter', submit: 'Anfrage senden', submitting: 'Wird gesendet …' },
   steps: {
     indicator: 'Schritt {{n}} / 07',
     contact: {

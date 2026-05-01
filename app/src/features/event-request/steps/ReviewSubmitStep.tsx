@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useFormContext, Controller } from 'react-hook-form'
 import type { EventRequestData } from '../schema'
@@ -8,15 +9,33 @@ import { cn } from '@/lib/utils'
 
 const MEETING_OPTS = ['none', 'call', 'onsite'] as const
 
-interface Props { step: number; onBack: () => void; onSubmit: () => void }
+interface Props { step: number; onBack: () => void; onSubmit: () => void | Promise<void> }
 
 export function ReviewSubmitStep({ step, onBack, onSubmit }: Props) {
   const { t } = useTranslation()
   const { watch, control, register } = useFormContext<EventRequestData>()
   const data = watch()
+  const [pending, setPending] = useState(false)
+
+  const handleSubmit = async () => {
+    if (pending) return
+    setPending(true)
+    try {
+      await onSubmit()
+    } finally {
+      setPending(false)
+    }
+  }
 
   return (
-    <StepShell currentStep={step} onBack={onBack} onNext={onSubmit} nextLabel={t('nav.submit')} surface="sand">
+    <StepShell
+      currentStep={step}
+      onBack={onBack}
+      onNext={handleSubmit}
+      nextLabel={t('nav.submit')}
+      nextPending={pending}
+      surface="sand"
+    >
       <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-6 md:h-8 w-auto mb-6" />
 
       <h1

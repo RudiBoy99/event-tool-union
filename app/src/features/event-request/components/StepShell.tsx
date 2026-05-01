@@ -14,6 +14,7 @@ interface Props {
   onNext?: () => void
   nextDisabled?: boolean
   nextLabel?: string
+  nextPending?: boolean
   hideNav?: boolean
   surface?: 'black' | 'sand'
 }
@@ -25,6 +26,7 @@ export function StepShell({
   onNext,
   nextDisabled,
   nextLabel,
+  nextPending,
   hideNav,
   surface = 'black',
 }: Props) {
@@ -108,16 +110,28 @@ export function StepShell({
                   </button>
                   <button
                     onClick={onNext}
-                    disabled={nextDisabled || !onNext}
-                    className="px-7 py-2.5 text-[11px] font-black tracking-[0.08em] uppercase transition-all duration-200 disabled:opacity-30 hover:brightness-110"
+                    disabled={nextDisabled || nextPending || !onNext}
+                    className="relative inline-flex items-center justify-center gap-2 px-7 py-2.5 text-[11px] font-black tracking-[0.08em] uppercase transition-all duration-200 disabled:opacity-30 hover:brightness-110 active:scale-[0.97] active:brightness-95"
                     style={{
                       fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
                       background: isSand ? '#000000' : 'var(--color-brand)',
                       color: isSand ? '#ffffff' : '#000000',
-                      transition: 'background 400ms ease',
                     }}
                   >
-                    {nextLabel ?? t('nav.next')} →
+                    {nextPending && (
+                      <span
+                        aria-hidden="true"
+                        className="inline-block w-3.5 h-3.5 rounded-full animate-spin"
+                        style={{
+                          border: `2px solid ${isSand ? 'rgba(255,255,255,0.35)' : 'rgba(0,0,0,0.3)'}`,
+                          borderTopColor: 'transparent',
+                        }}
+                      />
+                    )}
+                    <span>
+                      {nextPending ? t('nav.submitting') : (nextLabel ?? t('nav.next'))}
+                    </span>
+                    {!nextPending && <span aria-hidden="true">→</span>}
                   </button>
                 </div>
               )}
