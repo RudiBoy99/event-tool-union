@@ -13,6 +13,25 @@ import { ExtrasStep } from './steps/ExtrasStep'
 import { ReviewSubmitStep } from './steps/ReviewSubmitStep'
 import { ConfirmationScreen } from './steps/ConfirmationScreen'
 
+// Map first invalid field path to the wizard step that owns it
+const FIELD_TO_STEP: Array<{ match: (path: string) => boolean; step: number }> = [
+  { match: (p) => p.startsWith('contact'),    step: 1 },
+  { match: (p) => p === 'eventType',          step: 2 },
+  { match: (p) => p.startsWith('attendees') || p.startsWith('sports'), step: 3 },
+  { match: (p) => p === 'location',           step: 4 },
+  { match: (p) => p.startsWith('dateTime'),   step: 5 },
+  { match: (p) => p.startsWith('gastro') || p.startsWith('rooms') || p.startsWith('extras'), step: 6 },
+]
+
+function firstInvalidStep(errors: Record<string, unknown>): number | null {
+  const paths = Object.keys(errors)
+  for (const p of paths) {
+    const m = FIELD_TO_STEP.find((r) => r.match(p))
+    if (m) return m.step
+  }
+  return null
+}
+
 export function EventRequestWizard() {
   const methods = useForm<EventRequestData>({
     resolver: zodResolver(eventRequestSchema),
@@ -27,10 +46,28 @@ export function EventRequestWizard() {
     nav.next()
   }
 
-  const onSubmit = async (data: EventRequestData) => {
+  const submitFromReview = async (): Promise<void> => {
+    const ok = await methods.trigger()
+    if (!ok) {
+      const errors = methods.formState.errors as Record<string, unknown>
+      const target = firstInvalidStep(errors)
+      // Surface a structured error so the review step can render a banner
+      const fields = Object.keys(errors).flatMap((k) => {
+        const sub = (errors as any)[k]
+        if (sub && typeof sub === 'object' && !sub.message) {
+          return Object.keys(sub).map((nested) => `${k}.${nested}`)
+        }
+        return [k]
+      })
+      const err = new Error('VALIDATION_FAILED') as Error & { fields: string[]; targetStep: number | null }
+      err.fields = fields
+      err.targetStep = target
+      throw err
+    }
+    const data = methods.getValues()
     await trackLead(7)
     console.log('EVENT REQUEST SUBMITTED:', data)
-    resetLeadId()  // fresh ID for next session
+    resetLeadId()
     nav.goTo(8)
   }
 
@@ -48,7 +85,8 @@ export function EventRequestWizard() {
             key="7"
             step={7}
             onBack={nav.back}
-            onSubmit={methods.handleSubmit(onSubmit)}
+            onSubmit={submitFromReview}
+            onJumpToStep={(s) => nav.goTo(s)}
           />
         )}
         {nav.step === 8 && <ConfirmationScreen key="8" onNew={() => nav.goTo(1)} />}
