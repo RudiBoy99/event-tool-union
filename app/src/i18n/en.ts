@@ -70,6 +70,7 @@ export const en = {
     },
     location: {
       title: 'Where?',
+      autoSelected: '{{location}} is the only venue offering your selected sport.',
       tagline: {
         muenchenstein: 'Main venue · 15,000 m² by the forest · Bistro & parking',
         hafen: 'Uferstrasse 70 · Right at the Rhine harbour · Padel-focused',
@@ -91,7 +92,7 @@ export const en = {
     eventType: {
       title: 'What are you planning?',
       birthday: 'Birthday', corporate: 'Corporate', teambuilding: 'Team-Building',
-      tournament: 'Tournament', camp: 'Camp', school: 'School/Youth', court_only: 'Courts only',
+      tournament: 'Tournament', camp: 'Camp', school: 'School', court_only: 'Courts only',
     },
     attendees: {
       title: 'Attendees & sport',
@@ -99,6 +100,8 @@ export const en = {
       ageGroups: { children: 'Children', teens: 'Teens', adults: 'Adults', mixed: 'Mixed' },
       levels: { beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Pro', mixed: 'Mixed' },
       sports: 'Sport(s)', courts: 'Courts',
+      conflictTitle: 'This combination is not possible',
+      conflictText: 'Your selected sports are not all available at the same venue. Please adjust your selection or submit separate requests per venue.',
     },
     extras: {
       title: 'Extras & food',

@@ -187,6 +187,119 @@ async function sendNotificationEmail(payload: LeadPayload): Promise<void> {
   })
 }
 
+function buildConfirmationEmail(d: any, leadId: string): { subject: string; html: string; text: string } {
+  const lang = (d.contact?.language || 'de').toLowerCase().startsWith('en') ? 'en' : 'de'
+  const name = d.contact?.name || (lang === 'en' ? 'there' : 'zusammen')
+  const eventType = EVENT_TYPE_LABELS[d.eventType] || d.eventType || '—'
+  const location = LOCATION_LABELS[d.location] || d.location || '—'
+  const date = d.dateTime?.date || '—'
+  const startTime = d.dateTime?.startTime || '—'
+  const personen = d.attendees?.count ?? '—'
+
+  const copy = lang === 'en' ? {
+    subject: `Your event request — Union Sport`,
+    eyebrow: 'Union Sport · Events',
+    hello: `Hi ${name},`,
+    intro: 'Thanks for your event request — we received it and will get back to you shortly.',
+    summaryTitle: 'YOUR REQUEST',
+    type: 'Event type',
+    when: 'When',
+    where: 'Where',
+    people: 'People',
+    refLabel: 'Reference',
+    closing: 'We will personally review your request and reply with a tailored offer.',
+    signoff: 'Your Union Sport team',
+    footer: 'If you have any questions, simply reply to this email.',
+  } : {
+    subject: `Deine Event-Anfrage — Union Sport`,
+    eyebrow: 'Union Sport · Events',
+    hello: `Hallo ${name},`,
+    intro: 'Vielen Dank für deine Event-Anfrage — sie ist bei uns eingegangen und wir melden uns in Kürze persönlich.',
+    summaryTitle: 'DEINE ANFRAGE',
+    type: 'Event-Typ',
+    when: 'Wann',
+    where: 'Wo',
+    people: 'Personen',
+    refLabel: 'Referenz',
+    closing: 'Wir prüfen deine Anfrage persönlich und melden uns mit einem massgeschneiderten Angebot.',
+    signoff: 'Dein Union Sport Team',
+    footer: 'Bei Fragen einfach auf diese Mail antworten.',
+  }
+
+  const subject = copy.subject
+
+  const html = `<!DOCTYPE html>
+<html><head><meta charset="utf-8"></head>
+<body style="margin:0;padding:0;background:#FFF1E5;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;">
+  <div style="max-width:640px;margin:0 auto;padding:32px 24px;background:#FFF1E5;">
+    <div style="background:#FF9829;padding:24px;margin-bottom:24px;">
+      <div style="font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#0a0a0a;font-weight:700;">${copy.eyebrow}</div>
+      <h1 style="font-size:28px;font-weight:900;color:#0a0a0a;margin:8px 0 0;letter-spacing:-0.02em;text-transform:uppercase;">${lang === 'en' ? 'Request received' : 'Anfrage eingegangen'}</h1>
+    </div>
+    <div style="background:#fff;padding:24px;">
+      <p style="font-size:16px;color:#0a0a0a;margin:0 0 16px;">${copy.hello}</p>
+      <p style="font-size:15px;color:#0a0a0a;line-height:1.5;margin:0 0 24px;">${copy.intro}</p>
+
+      <div style="border-top:1px solid #eee;padding-top:16px;margin-bottom:16px;">
+        <p style="font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:#888;margin:0 0 8px;">${copy.summaryTitle}</p>
+        <p style="font-size:14px;color:#0a0a0a;margin:0 0 4px;"><strong>${copy.type}:</strong> ${eventType}</p>
+        <p style="font-size:14px;color:#0a0a0a;margin:0 0 4px;"><strong>${copy.when}:</strong> ${date} · ${startTime}</p>
+        <p style="font-size:14px;color:#0a0a0a;margin:0 0 4px;"><strong>${copy.where}:</strong> ${location}</p>
+        <p style="font-size:14px;color:#0a0a0a;margin:0 0 4px;"><strong>${copy.people}:</strong> ${personen}</p>
+      </div>
+
+      <p style="font-size:15px;color:#0a0a0a;line-height:1.5;margin:24px 0 16px;">${copy.closing}</p>
+      <p style="font-size:15px;color:#0a0a0a;margin:0 0 24px;">${copy.signoff}</p>
+
+      <div style="border-top:1px solid #eee;padding-top:16px;margin-top:24px;">
+        <p style="font-size:11px;color:#888;margin:0;">${copy.refLabel}: <code>${leadId}</code></p>
+        <p style="font-size:11px;color:#888;margin:8px 0 0;">${copy.footer}</p>
+      </div>
+    </div>
+  </div>
+</body></html>`
+
+  const text = `${copy.hello}
+
+${copy.intro}
+
+${copy.summaryTitle}
+${copy.type}: ${eventType}
+${copy.when}: ${date} · ${startTime}
+${copy.where}: ${location}
+${copy.people}: ${personen}
+
+${copy.closing}
+
+${copy.signoff}
+
+${copy.refLabel}: ${leadId}
+${copy.footer}`
+
+  return { subject, html, text }
+}
+
+async function sendConfirmationEmail(payload: LeadPayload): Promise<void> {
+  const apiKey = process.env.RESEND_API_KEY
+  const from = process.env.EVENT_NOTIFICATION_FROM
+  const replyTo = process.env.EVENT_NOTIFICATION_TO
+  const customerEmail = payload.data?.contact?.email
+  if (!apiKey || !from || !customerEmail) {
+    console.warn('Resend env or customer email missing, skipping confirmation email')
+    return
+  }
+  const resend = new Resend(apiKey)
+  const { subject, html, text } = buildConfirmationEmail(payload.data || {}, payload.leadId)
+  await resend.emails.send({
+    from: `Union Sport Events <${from}>`,
+    to: [customerEmail],
+    replyTo: replyTo || undefined,
+    subject,
+    html,
+    text,
+  })
+}
+
 const HEADERS = [
   'leadId', 'Erstellt', 'Aktualisiert', 'Status', 'Schritt',
   'Name', 'Firma', 'Email', 'Telefon', 'Sprache',
@@ -319,7 +432,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
 
       if (payload.status === 'SUBMITTED') {
-        try { await sendNotificationEmail(payload) } catch (e) { console.error('email send failed (update path):', e) }
+        try { await sendNotificationEmail(payload) } catch (e) { console.error('notification email failed:', e) }
+        try { await sendConfirmationEmail(payload) } catch (e) { console.error('confirmation email failed:', e) }
       }
 
       return res.status(200).json({ ok: true, action: 'updated', row: existingRow })
@@ -333,7 +447,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       })
 
       if (payload.status === 'SUBMITTED') {
-        try { await sendNotificationEmail(payload) } catch (e) { console.error('email send failed (insert path):', e) }
+        try { await sendNotificationEmail(payload) } catch (e) { console.error('notification email failed:', e) }
+        try { await sendConfirmationEmail(payload) } catch (e) { console.error('confirmation email failed:', e) }
       }
 
       return res.status(200).json({ ok: true, action: 'inserted' })

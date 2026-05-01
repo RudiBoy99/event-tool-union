@@ -70,6 +70,7 @@ export const de = {
     },
     location: {
       title: 'Wo steigt\'s?',
+      autoSelected: '{{location}} ist der einzige Standort, der deine gewählte Sportart anbietet.',
       tagline: {
         muenchenstein: 'Hauptstandort · 15 000 m² am Waldrand · Gastro & Parkplätze',
         hafen: 'Uferstrasse 70 · Direkt am Rheinhafen · Spezialist für Padel-Events',
@@ -90,8 +91,8 @@ export const de = {
     },
     eventType: {
       title: 'Was planst du?',
-      birthday: 'Geburtstag', corporate: 'Firmenanlass', teambuilding: 'Teambuilding',
-      tournament: 'Turnier', camp: 'Camp', school: 'Schule/Jugend', court_only: 'Court-Only',
+      birthday: 'Geburtstag', corporate: 'Firmen-Anlass', teambuilding: 'Teambuilding',
+      tournament: 'Turnier', camp: 'Camp', school: 'Schule', court_only: 'Court-Only',
     },
     attendees: {
       title: 'Teilnehmer & Sport',
@@ -99,6 +100,8 @@ export const de = {
       ageGroups: { children: 'Kinder', teens: 'Jugend', adults: 'Erwachsene', mixed: 'Gemischt' },
       levels: { beginner: 'Anfänger', intermediate: 'Fortgeschritten', advanced: 'Pro', mixed: 'Gemischt' },
       sports: 'Sportart(en)', courts: 'Courts',
+      conflictTitle: 'Diese Kombination ist nicht möglich',
+      conflictText: 'Deine gewählten Sportarten sind nicht alle am gleichen Standort verfügbar. Bitte passe die Auswahl an oder erstelle separate Anfragen pro Standort.',
     },
     extras: {
       title: 'Extras & Gastro',

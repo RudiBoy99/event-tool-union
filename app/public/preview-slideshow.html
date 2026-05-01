@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slideshow Mockup — Union Sport</title>
+<style>
+  :root {
+    --brand: #FF9829;
+    --black: #0a0a0a;
+    --sand: #FFF1E5;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--sand); color: #0a0a0a; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, sans-serif; min-height: 100vh; }
+
+  header {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 18px 32px;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+    background: #fff;
+  }
+  .logo { font-weight: 900; letter-spacing: -0.02em; font-size: 18px; text-transform: uppercase; color: #0a0a0a; }
+  .logo span { color: var(--accent, #1E5BC6); transition: color 600ms ease; }
+
+  .tabs {
+    display: flex; gap: 6px;
+    background: #f5f0e8;
+    padding: 4px;
+    border: 1px solid rgba(0,0,0,0.1);
+  }
+  .tab {
+    padding: 8px 16px;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(0,0,0,0.5);
+    background: transparent; border: none; cursor: pointer;
+    transition: all 200ms;
+  }
+  .tab:hover { color: #0a0a0a; }
+  .tab.active {
+    background: var(--accent, #1E5BC6); color: #fff;
+    transition: background 600ms ease, color 200ms;
+  }
+
+  .progress {
+    display: flex; gap: 4px; padding: 12px 32px;
+    background: #fff;
+    border-bottom: 1px solid rgba(0,0,0,0.08);
+  }
+  .progress-step {
+    flex: 1;
+    height: 3px;
+    background: rgba(0,0,0,0.08);
+  }
+  .progress-step.done, .progress-step.current {
+    background: var(--accent, #1E5BC6);
+    transition: background 600ms ease;
+  }
+
+  main {
+    max-width: 1180px; margin: 0 auto;
+    padding: 48px 32px;
+    display: grid; grid-template-columns: 1.05fr 1fr; gap: 56px;
+    align-items: start;
+  }
+
+  /* LEFT: Form */
+  .form-side .step-marker {
+    font-family: 'SF Mono', Menlo, monospace;
+    font-size: 10px; letter-spacing: 0.2em;
+    color: rgba(0,0,0,0.4); text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .form-side h1 {
+    margin: 0 0 12px;
+    font-size: clamp(36px, 4.4vw, 56px);
+    font-weight: 900; letter-spacing: -0.02em; line-height: 0.98;
+    text-transform: uppercase;
+  }
+  .form-side h1 .accent { color: var(--accent, #1E5BC6); transition: color 600ms ease; }
+  .form-side .lead {
+    font-size: 15px; line-height: 1.5;
+    color: rgba(0,0,0,0.7); margin-bottom: 28px;
+    max-width: 460px;
+  }
+  .field-label {
+    display: block;
+    font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+    font-weight: 800; color: #0a0a0a;
+    margin-bottom: 6px;
+  }
+  .field-input {
+    width: 100%;
+    background: #fff;
+    border: 1.5px solid #0a0a0a;
+    padding: 13px;
+    font-size: 14px; font-family: inherit;
+    color: #0a0a0a;
+    margin-bottom: 16px;
+    border-radius: 0;
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--accent, #1E5BC6);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent, #1E5BC6) 25%, transparent);
+  }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .actions { display: flex; gap: 10px; margin-top: 12px; }
+  .btn-back {
+    padding: 14px 22px;
+    background: transparent;
+    border: 1.5px solid #0a0a0a;
+    color: #0a0a0a;
+    font-size: 11px; font-weight: 800;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; font-family: inherit;
+  }
+  .btn-cta {
+    flex: 1;
+    background: var(--accent, #1E5BC6); color: #fff;
+    border: none; padding: 14px 22px;
+    font-size: 11px; font-weight: 900;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    cursor: pointer; font-family: inherit;
+    transition: background 600ms ease, filter 200ms;
+  }
+  .btn-cta:hover { filter: brightness(1.08); }
+
+  /* RIGHT: Slideshow Card */
+  .visual-side {
+    position: sticky; top: 24px;
+  }
+  .visual-card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    background: #0a0a0a;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.18);
+  }
+  .visual-card .slides { position: absolute; inset: 0; }
+  .slide {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    opacity: 0;
+    transition: opacity 1.2s ease-in-out;
+    transform: scale(1.05);
+    animation: kenburns 12s ease-in-out infinite alternate;
+  }
+  .slide.active { opacity: 1; }
+  @keyframes kenburns {
+    0% { transform: scale(1.0); }
+    100% { transform: scale(1.05); }
+  }
+  .visual-card::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.7) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+  .visual-caption {
+    position: absolute; left: 0; right: 0; bottom: 0;
+    padding: 20px 24px;
+    z-index: 3;
+    color: #fff;
+  }
+  .visual-eyebrow {
+    font-size: 10px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--accent, #1E5BC6); font-weight: 900;
+    margin-bottom: 4px;
+    transition: color 600ms ease;
+  }
+  .visual-title {
+    font-size: 18px; font-weight: 900; letter-spacing: -0.01em;
+    text-transform: uppercase; line-height: 1.1;
+  }
+  .visual-dot-bar {
+    position: absolute; right: 16px; top: 16px;
+    z-index: 3;
+    display: flex; gap: 6px;
+  }
+  .visual-dot {
+    width: 8px; height: 8px;
+    background: rgba(255,255,255,0.35);
+    border-radius: 999px;
+  }
+  .visual-dot.active {
+    background: #fff;
+    width: 22px;
+    transition: width 200ms;
+  }
+
+  .visual-pill {
+    display: inline-flex; gap: 6px; align-items: center;
+    margin-top: 14px;
+    padding: 8px 12px;
+    background: #fff;
+    border: 1px solid rgba(0,0,0,0.1);
+    font-size: 11px;
+    color: rgba(0,0,0,0.7);
+    font-weight: 600;
+  }
+  .visual-pill::before {
+    content: ''; display: inline-block;
+    width: 6px; height: 6px; border-radius: 999px;
+    background: var(--accent, #1E5BC6);
+    transition: background 600ms ease;
+  }
+
+  @media (max-width: 900px) {
+    main { grid-template-columns: 1fr; gap: 28px; padding: 32px 20px; }
+    .visual-side { position: static; }
+    .visual-card { aspect-ratio: 16/10; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">UNION <span>SPORT</span></div>
+  <div class="tabs">
+    <button class="tab active" data-sport="padel">Padel</button>
+    <button class="tab" data-sport="tennis">Tennis</button>
+    <button class="tab" data-sport="pb">Pickleball</button>
+  </div>
+</header>
+
+<div class="progress" aria-label="Schritt-Fortschritt">
+  <div class="progress-step done"></div>
+  <div class="progress-step done"></div>
+  <div class="progress-step done"></div>
+  <div class="progress-step current"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+  <div class="progress-step"></div>
+</div>
+
+<main>
+  <div class="form-side">
+    <div class="step-marker">SCHRITT 4 VON 7 — DATUM &amp; DAUER</div>
+    <h1>Wann soll dein <span class="accent">Event</span> stattfinden?</h1>
+    <p class="lead" id="lead">5 Indoor Courts am Hafen Basel. Wähle Datum und Dauer — wir prüfen die Verfügbarkeit für deine Gruppe.</p>
+
+    <span class="field-label">Datum</span>
+    <input class="field-input" type="text" placeholder="01.06.2026" />
+
+    <div class="row2">
+      <div>
+        <span class="field-label">Startzeit</span>
+        <select class="field-input"><option>18:00</option><option>19:00</option><option>20:00</option></select>
+      </div>
+      <div>
+        <span class="field-label">Dauer</span>
+        <select class="field-input"><option>2 Stunden</option><option selected>3 Stunden</option><option>4 Stunden</option></select>
+      </div>
+    </div>
+
+    <span class="field-label">Anzahl Personen</span>
+    <input class="field-input" type="number" placeholder="12" />
+
+    <div class="actions">
+      <button class="btn-back">← Zurück</button>
+      <button class="btn-cta">Weiter →</button>
+    </div>
+  </div>
+
+  <aside class="visual-side">
+    <div class="visual-card">
+      <div class="slides" id="slides"></div>
+      <div class="visual-dot-bar" id="dots"></div>
+      <div class="visual-caption">
+        <div class="visual-eyebrow" id="eyebrow">PADEL · UNION HAFEN BASEL</div>
+        <div class="visual-title" id="title">5 Indoor Courts am Rhein</div>
+      </div>
+    </div>
+    <div class="visual-pill" id="pill">Hafen Basel · Indoor · Padel</div>
+  </aside>
+</main>
+
+<script>
+  const sports = {
+    padel: {
+      images: ['01-court-hall', '02-player-action', '03-highfive', '04-group-court', '05-group-close'],
+      color: '#1E5BC6',
+      eyebrow: 'PADEL · UNION HAFEN BASEL',
+      title: '5 Indoor Courts am Rhein',
+      lead: '5 Indoor Courts am Hafen Basel. Wähle Datum und Dauer — wir prüfen die Verfügbarkeit für deine Gruppe.',
+      pill: 'Hafen Basel · Indoor · Padel',
+    },
+    tennis: {
+      images: ['01-outdoor-court', '02-indoor-hall', '04-indoor-wilson', '03-group-court', '05-player-action'],
+      color: '#E8531F',
+      eyebrow: 'TENNIS · MÜNCHENSTEIN',
+      title: 'Indoor & Outdoor Plätze',
+      lead: 'Tennishalle und Outdoor-Plätze in Münchenstein. Wähle Datum und Dauer — wir prüfen die Verfügbarkeit für deine Gruppe.',
+      pill: 'Münchenstein · Indoor + Outdoor · Tennis',
+    },
+    pb: {
+      images: ['02-hall-wide', '03-team-red', '04-court-action', '05-team-yellow', '06-team-blue', '01-hall-banners'],
+      color: '#7C3AED',
+      eyebrow: 'PICKLEBALL · UNION WOLF',
+      title: 'Pickleball-Halle Basel Wolf',
+      lead: 'Pickleball-Halle am Standort Wolf — perfekt für Teamevents und Turniere bis 24 Personen.',
+      pill: 'Wolf Basel · Indoor · Pickleball',
+    },
+  };
+
+  const slidesEl = document.getElementById('slides');
+  const dotsEl = document.getElementById('dots');
+  const eyebrowEl = document.getElementById('eyebrow');
+  const titleEl = document.getElementById('title');
+  const leadEl = document.getElementById('lead');
+  const pillEl = document.getElementById('pill');
+  const tabs = document.querySelectorAll('.tab');
+
+  let slideIdx = 0;
+  let slideTimer;
+
+  function clearChildren(el) {
+    while (el.firstChild) el.removeChild(el.firstChild);
+  }
+
+  function setSport(name) {
+    const cfg = sports[name];
+    document.documentElement.style.setProperty('--accent', cfg.color);
+
+    clearChildren(slidesEl);
+    clearChildren(dotsEl);
+    cfg.images.forEach(function (img, i) {
+      const slide = document.createElement('div');
+      slide.className = 'slide' + (i === 0 ? ' active' : '');
+      slide.style.backgroundImage = "url('/sports/" + name + "/" + img + ".jpg')";
+      slidesEl.appendChild(slide);
+
+      const dot = document.createElement('span');
+      dot.className = 'visual-dot' + (i === 0 ? ' active' : '');
+      dotsEl.appendChild(dot);
+    });
+    slideIdx = 0;
+
+    eyebrowEl.textContent = cfg.eyebrow;
+    titleEl.textContent = cfg.title;
+    leadEl.textContent = cfg.lead;
+    pillEl.textContent = cfg.pill;
+
+    tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.sport === name); });
+
+    clearInterval(slideTimer);
+    slideTimer = setInterval(advance, 4500);
+  }
+
+  function advance() {
+    const slides = slidesEl.querySelectorAll('.slide');
+    const dots = dotsEl.querySelectorAll('.visual-dot');
+    if (slides.length === 0) return;
+    slides[slideIdx].classList.remove('active');
+    dots[slideIdx].classList.remove('active');
+    slideIdx = (slideIdx + 1) % slides.length;
+    slides[slideIdx].classList.add('active');
+    dots[slideIdx].classList.add('active');
+  }
+
+  tabs.forEach(function (t) { t.addEventListener('click', function () { setSport(t.dataset.sport); }); });
+  setSport('padel');
+</script>
+</body>
+</html>

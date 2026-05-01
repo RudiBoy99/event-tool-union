@@ -3,7 +3,7 @@ import { useFormContext, Controller } from 'react-hook-form'
 import { useEffect, useMemo } from 'react'
 import type { EventRequestData } from '../schema'
 import { StepShell } from '../components/StepShell'
-import { LOCATIONS } from '../data/locations'
+import { getAvailableLocations } from '../data/locations'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
@@ -42,30 +42,26 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()
   const { register, control, watch, setValue } = useFormContext<EventRequestData>()
   const { setSports } = useBrandTheme()
-  const location = watch('location')
   const sports = watch('sports')
 
-  const availableSports = useMemo(() => {
-    // If no location yet (new flow: location is picked after sport), show all sports
-    if (!location) return ['padel', 'tennis', 'golf', 'pball', 'tabletennis']
-    const loc = LOCATIONS[location]
-    const keys = Object.keys(loc?.sports ?? {})
-    const families = new Set<string>()
-    keys.forEach((k) => {
-      if (k.startsWith('padel')) families.add('padel')
-      else if (k.startsWith('tennis')) families.add('tennis')
-      else if (k.startsWith('golf')) families.add('golf')
-      else if (k === 'pball') families.add('pball')
-      else if (k === 'tabletennis') families.add('tabletennis')
-    })
-    return Array.from(families)
-  }, [location])
+  // Sport is selected BEFORE location — always show selectable sport families.
+  const availableSports = useMemo(
+    () => ['padel', 'tennis', 'golf', 'pball'],
+    [],
+  )
 
   // Update brand theme when sports selection changes
   useEffect(() => {
     const selected = (sports ?? []).map((s) => s.sport)
     setSports(selected)
   }, [sports, setSports])
+
+  // Detect sport-combination conflict (no single location offers all selected sports)
+  const selectedFamilies = useMemo(() => (sports ?? []).map((s) => s.sport), [sports])
+  const hasConflict = useMemo(
+    () => selectedFamilies.length > 0 && getAvailableLocations(selectedFamilies).length === 0,
+    [selectedFamilies],
+  )
 
   const toggleSport = (sport: string) => {
     const current = sports ?? []
@@ -83,7 +79,7 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
   }
 
   return (
-    <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={(sports?.length ?? 0) === 0}>
+    <StepShell currentStep={step} onBack={onBack} onNext={onNext} nextDisabled={(sports?.length ?? 0) === 0 || hasConflict}>
       <h1 className="display-xl text-3xl md:text-4xl mb-6">{t('steps.attendees.title')}</h1>
 
       {/* Attendee details */}
@@ -186,6 +182,28 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
           )
         })}
       </div>
+
+      {/* Conflict warning when selected sports have no common location */}
+      {hasConflict && (
+        <div
+          role="alert"
+          className="mb-6 p-4 border-l-4"
+          style={{
+            background: 'rgba(245, 81, 39, 0.08)',
+            borderColor: '#F55127',
+          }}
+        >
+          <div
+            className="text-xs font-black uppercase tracking-wider mb-1"
+            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif', color: '#F55127' }}
+          >
+            {t('steps.attendees.conflictTitle')}
+          </div>
+          <div className="text-sm text-white/85">
+            {t('steps.attendees.conflictText')}
+          </div>
+        </div>
+      )}
 
       {/* Courts input for selected sports */}
       {(sports?.length ?? 0) > 0 && (

@@ -31,6 +31,23 @@ export const LOCATIONS: Record<string, LocationInfo> = {
   },
 }
 
+export type SportFamily = 'padel' | 'tennis' | 'golf' | 'pball' | 'tabletennis'
+
+export const SPORT_FAMILY_TO_LOCATIONS: Record<SportFamily, string[]> = {
+  padel: ['hafen', 'muenchenstein'],
+  tennis: ['muenchenstein'],
+  golf: ['muenchenstein'],
+  pball: ['wolf'],
+  tabletennis: ['wolf'],
+}
+
+export function getAvailableLocations(sportFamilies: string[]): string[] {
+  if (sportFamilies.length === 0) return Object.keys(LOCATIONS)
+  const sets = sportFamilies.map((s) => SPORT_FAMILY_TO_LOCATIONS[s as SportFamily] ?? [])
+  if (sets.some((s) => s.length === 0)) return []
+  return sets.reduce((acc, cur) => acc.filter((id) => cur.includes(id)), sets[0])
+}
+
 export const SPORT_LABELS: Record<string, { de: string; en: string }> = {
   padel_panorama: { de: 'Padel Panorama', en: 'Padel Panorama' },
   padel_single: { de: 'Padel Single', en: 'Padel Single' },
