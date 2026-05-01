@@ -120,7 +120,8 @@ export const de = {
     },
     confirmation: {
       title: 'Danke!',
-      subtitle: 'Referenznummer #{{ref}}. Wir melden uns bei dir!',
+      subtitle: 'Wir melden uns bei dir!',
+      refLabel: 'Referenznummer',
       ctaHome: 'Zur Übersicht',
     },
   },

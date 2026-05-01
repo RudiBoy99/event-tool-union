@@ -47,16 +47,19 @@ export function ConfirmationScreen({ onNew: _onNew }: { onNew: () => void }) {
             {t('steps.confirmation.title')}
           </h1>
 
-          {/* Subtitle with reference */}
-          <p className="text-black/70 text-base mb-2 max-w-md">
-            {t('steps.confirmation.subtitle', { ref })}
+          {/* Subtitle */}
+          <p className="text-black/70 text-base mb-6 max-w-md">
+            {t('steps.confirmation.subtitle')}
           </p>
 
-          {/* Monospace reference number */}
-          <div
-            className="font-mono text-xs tracking-[0.2em] text-black/40 mb-10 uppercase"
-          >
-            {ref}
+          {/* Reference number */}
+          <div className="mb-10">
+            <div className="label-caps-dark text-black/40 mb-1">
+              {t('steps.confirmation.refLabel')}
+            </div>
+            <div className="font-mono text-sm tracking-[0.2em] text-black/70 uppercase">
+              {ref}
+            </div>
           </div>
 
           {/* Action button */}
