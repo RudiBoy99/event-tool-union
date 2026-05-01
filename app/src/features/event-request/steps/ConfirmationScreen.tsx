@@ -39,9 +39,6 @@ export function ConfirmationScreen({ onNew: _onNew }: { onNew: () => void }) {
       {/* Confirmation content */}
       <main className="relative z-10 flex-1 flex flex-col justify-center px-6 md:px-10 py-12 md:py-20">
         <div className="max-w-xl">
-          {/* Logo above headline */}
-          <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-12 md:h-16 w-auto mb-8" />
-
           {/* Big DANKE headline */}
           <h1
             className="display-xl text-[80px] md:text-[120px] leading-none mb-6 text-black"
