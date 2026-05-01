@@ -92,8 +92,6 @@ export function ReviewSubmitStep({ step, onBack, onSubmit, onJumpToStep }: Props
       nextPending={pending}
       surface="sand"
     >
-      <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-6 md:h-8 w-auto mb-6" />
-
       <h1 className="display-xl text-3xl md:text-4xl mb-8 text-black">
         {t('steps.review.title')}
       </h1>
