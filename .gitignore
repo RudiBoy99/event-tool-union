@@ -24,3 +24,9 @@ Thumbs.db
 .env.local
 *.log
 .vercel
+
+# Raw source assets (cuts are in app/public/videos)
+Bilder/
+
+# Local design concept previews (not deployed)
+app/public/concepts.html

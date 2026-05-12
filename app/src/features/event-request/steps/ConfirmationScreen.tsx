@@ -1,5 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import { useMemo } from 'react'
+import { NotificationBell } from '@/components/NotificationBell'
 
 export function ConfirmationScreen({ onNew: _onNew }: { onNew: () => void }) {
   const { t } = useTranslation()
@@ -26,14 +27,15 @@ export function ConfirmationScreen({ onNew: _onNew }: { onNew: () => void }) {
         }}
       />
 
-      {/* Header */}
+      {/* Header — z-20 so the NotificationBell dropdown stays on top of the main content */}
       <header
-        className="relative z-10 flex items-center justify-between px-6 md:px-10 py-4 flex-shrink-0"
+        className="relative z-20 flex items-center justify-between px-6 md:px-10 py-4 flex-shrink-0"
         style={{ borderBottom: '1px solid rgba(0,0,0,0.08)' }}
       >
         <div className="flex items-center gap-2.5">
           <img src="/logos/UnionSport_RGB.png" alt="Union Sport" className="h-7 md:h-8 w-auto" />
         </div>
+        <NotificationBell theme="light" />
       </header>
 
       {/* Confirmation content */}

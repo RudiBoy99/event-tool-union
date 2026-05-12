@@ -16,6 +16,7 @@ const EVENT_TYPE_LABELS: Record<string, string> = {
   camp: 'Camp',
   school: 'Schule / Jugend',
   court_only: 'Court-Only',
+  neon_padel: 'Neon Padel',
 }
 
 function fmtFlags(obj: any, dict?: Record<string, string>): string {

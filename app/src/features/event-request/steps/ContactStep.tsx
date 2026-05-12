@@ -20,7 +20,7 @@ export function ContactStep({ step, onBack, onNext }: Props) {
   }
 
   return (
-    <StepShell currentStep={step} onBack={onBack} onNext={handleNext}>
+    <StepShell currentStep={step} onBack={onBack} onNext={handleNext} legacyImage>
       <h1 className="display-xl text-3xl md:text-4xl mb-8">
         {t('steps.contact.title').split(' ').slice(0, -1).join(' ')}{' '}
         <span style={{ color: 'var(--color-brand)' }}>
@@ -71,7 +71,7 @@ export function ContactStep({ step, onBack, onNext }: Props) {
           <button
             type="button"
             onClick={() => setPrivacyOpen(true)}
-            className="underline decoration-[var(--color-brand)] decoration-2 underline-offset-2 hover:text-white bg-transparent p-0 border-0 cursor-pointer text-[12px] leading-[1.55] text-white/55 hover:text-white"
+            className="underline [text-decoration-skip-ink:none] decoration-[var(--color-brand)] decoration-2 underline-offset-2 hover:text-white bg-transparent p-0 border-0 cursor-pointer text-[12px] leading-[1.55] text-white/55 hover:text-white"
           >
             {t('steps.contact.privacyLink')}
           </button>

@@ -39,7 +39,7 @@ export function EventRequestWizard() {
     defaultValues: emptyEventRequest,
   })
   const nav = useStepNavigation(8)
-  const { trackLead } = useLeadTracking(methods.getValues)
+  const { trackLead, submitFinal } = useLeadTracking(methods.getValues)
 
   const onStepNext = (currentStep: number) => async () => {
     await trackLead(currentStep)
@@ -64,9 +64,9 @@ export function EventRequestWizard() {
       err.targetStep = target
       throw err
     }
-    const data = methods.getValues()
-    await trackLead(7)
-    console.log('EVENT REQUEST SUBMITTED:', data)
+    // Final submit throws on API failure → ReviewSubmitStep shows the error banner
+    // instead of silently advancing to the confirmation screen on data loss.
+    await submitFinal()
     resetLeadId()
     nav.goTo(8)
   }

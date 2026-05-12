@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import { LanguageToggle } from '../components/LanguageToggle'
+import { NotificationBell } from '@/components/NotificationBell'
 
 const EASE_OUT_EXPO: [number, number, number, number] = [0.16, 1, 0.3, 1]
 
@@ -114,94 +115,111 @@ export function HeroScreen() {
           alt="Union Sport"
           className="h-7 md:h-8 w-auto"
         />
-        <LanguageToggle />
+        <div className="flex items-center gap-2 md:gap-3">
+          <NotificationBell theme="dark" />
+          <LanguageToggle />
+        </div>
       </header>
 
+      {/* Eyebrow — bottom-left, aligned vertically with "PLANEN" word inside the right CTA */}
+      <motion.div
+        initial={reduceMotion ? false : { opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, delay: 0.55, ease: EASE_OUT_EXPO }}
+        className="absolute z-20 text-[var(--color-brand)] text-[10px] md:text-[11px] font-bold uppercase whitespace-nowrap"
+        style={{
+          left: 'clamp(24px, 4vw, 48px)',
+          bottom: 'clamp(28px, 4vw, 56px)',
+          letterSpacing: '0.22em',
+          fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
+        }}
+      >
+        {t('hero.eyebrow')}
+      </motion.div>
+
+      <main className="relative z-20 flex min-h-screen items-center px-6 md:px-12 lg:px-20 pt-24 pb-44 md:pb-56">
+        <motion.h1
+          initial={reduceMotion ? false : { opacity: 0, y: 24 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT_EXPO }}
+          className="font-black uppercase max-w-[820px]"
+          style={{
+            fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
+            fontSize: 'clamp(40px, 9vw, 128px)',
+            lineHeight: 0.92,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          {t('hero.title1')}{' '}
+          <span style={{ color: 'var(--color-brand)' }}>{t('hero.titleAccent')}</span>
+          <br />
+          {t('hero.title2')}{' '}
+          <span style={{ color: 'var(--color-brand)' }}>{t('hero.titleUnderline')}</span>
+        </motion.h1>
+      </main>
+
+      {/* CTA — Union quarter-circle, bottom-right; contains subtitle + CTA */}
       <div
-        className="absolute bottom-0 right-0 pointer-events-none z-10"
+        className="absolute bottom-0 right-0 z-20"
         style={{
           transform: `translate(${parallax.x}px, ${parallax.y}px)`,
           transition: 'transform 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
         }}
       >
-        <motion.div
-          aria-hidden
+        <motion.button
+          type="button"
+          onClick={handleCta}
+          aria-label={t('hero.ctaPrimary')}
+          className="group relative block cursor-pointer border-0 p-0 transition-[filter] duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-black"
           style={{
-            width: 'min(22vw, 320px)',
-            height: 'min(22vw, 320px)',
+            width: 'min(36vw, 460px)',
+            height: 'min(36vw, 460px)',
             background: 'var(--color-brand)',
             borderRadius: '100% 0 0 0',
             transformOrigin: 'bottom right',
           }}
           initial={reduceMotion ? false : { scale: 0 }}
           animate={{ scale: 1 }}
-          transition={{ type: 'spring', stiffness: 60, damping: 18, delay: 0.9 }}
-        />
-      </div>
-
-      <main className="relative z-20 flex min-h-screen items-center px-6 md:px-12 lg:px-20">
-        <div className="max-w-[720px] flex flex-col gap-6 md:gap-8">
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.15, ease: EASE_OUT_EXPO }}
-            className="text-[var(--color-brand)] text-[11px] md:text-xs font-bold uppercase"
+          transition={{ type: 'spring', stiffness: 60, damping: 18, delay: 0.7 }}
+        >
+          <span
+            className="absolute right-7 bottom-6 md:right-12 md:bottom-10 flex flex-col items-end gap-4 md:gap-5 text-black pointer-events-none text-right"
             style={{
-              letterSpacing: '0.22em',
               fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
             }}
           >
-            {t('hero.eyebrow')}
-          </motion.div>
+            {/* Subtitle — inside the quarter-circle, restrained width to clear the curve */}
+            <span
+              className="text-[11px] md:text-[13px] leading-[1.45] font-medium normal-case text-black/85 max-w-[200px] md:max-w-[280px]"
+              style={{ letterSpacing: '0.01em', fontFamily: 'system-ui, -apple-system, sans-serif' }}
+            >
+              {t('hero.subtitle')}
+            </span>
 
-          <motion.h1
-            initial={reduceMotion ? false : { opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.3, ease: EASE_OUT_EXPO }}
-            className="font-black uppercase"
-            style={{
-              fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
-              fontSize: 'clamp(40px, 9vw, 128px)',
-              lineHeight: 0.92,
-              letterSpacing: '-0.02em',
-            }}
-          >
-            {t('hero.title1')}{' '}
-            <span style={{ color: 'var(--color-brand)' }}>{t('hero.titleAccent')}</span>
-            <br />
-            {t('hero.title2')}{' '}
-            <span style={{ color: 'var(--color-brand)' }}>{t('hero.titleUnderline')}</span>
-          </motion.h1>
-
-          <motion.p
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.55, ease: EASE_OUT_EXPO }}
-            className="text-white/85 text-base md:text-lg max-w-md leading-relaxed"
-          >
-            {t('hero.subtitle')}
-          </motion.p>
-
-          <motion.div
-            initial={reduceMotion ? false : { opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.75, ease: EASE_OUT_EXPO }}
-            className="mt-2"
-          >
-            <button
-              onClick={handleCta}
-              className="group inline-flex items-center gap-4 bg-[var(--color-brand)] px-10 py-5 text-black font-black text-sm uppercase transition-[filter] duration-200 hover:brightness-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-4 focus-visible:ring-offset-black w-full sm:w-auto justify-center sm:justify-start"
+            {/* CTA word stack — large */}
+            <span
+              className="leading-[0.92] font-black uppercase"
               style={{
-                fontFamily: 'Söhne Breit, Archivo Black, sans-serif',
-                letterSpacing: '0.08em',
+                fontSize: 'clamp(28px, 5.5vw, 64px)',
+                letterSpacing: '0.04em',
               }}
             >
-              <span>{t('hero.ctaPrimary').replace(' →', '')}</span>
-              <span className="transition-transform duration-200 group-hover:translate-x-1">→</span>
-            </button>
-          </motion.div>
-        </div>
-      </main>
+              {t('hero.ctaPrimary').replace(' →', '').split(' ').map((w, i) => (
+                <span key={i} className="block">{w}</span>
+              ))}
+            </span>
+
+            {/* Arrow */}
+            <span
+              aria-hidden="true"
+              className="transition-transform duration-200 group-hover:translate-x-1 leading-none"
+              style={{ fontSize: 'clamp(28px, 4.5vw, 52px)' }}
+            >
+              →
+            </span>
+          </span>
+        </motion.button>
+      </div>
 
       <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-[var(--color-brand)] z-10" />
 

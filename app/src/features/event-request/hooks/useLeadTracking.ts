@@ -60,5 +60,31 @@ export function useLeadTracking(getValues: () => EventRequestData) {
     }
   }, [getValues])
 
-  return { trackLead }
+  /**
+   * Final submission for step 7. Unlike `trackLead`, this surfaces errors so
+   * the UI can show a banner instead of silently sending the user to the
+   * confirmation screen on a failed submit.
+   */
+  const submitFinal = useCallback(async () => {
+    const leadId = leadIdRef.current || getOrCreateLeadId()
+    const data = getValues()
+    if (!data.contact?.email) throw new Error('Missing contact email')
+
+    const res = await fetch('/api/track-lead', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        leadId,
+        status: STEP_STATUS[7],
+        step: 7,
+        data,
+      }),
+    })
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      throw new Error(`Submission failed (${res.status}): ${text || 'unknown error'}`)
+    }
+  }, [getValues])
+
+  return { trackLead, submitFinal }
 }

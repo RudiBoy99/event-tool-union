@@ -27,7 +27,7 @@ export const de = {
         sections: {
           responsible: {
             title: '1. Verantwortliche Stelle',
-            body: 'Union Sport AG\nHauptstrasse 1\n4142 Münchenstein\nSchweiz\n\nE-Mail: events@union-sport.ch',
+            body: 'Union Sport AG\nReinacherstrasse 66\n4142 Münchenstein\nSchweiz\n\nE-Mail: events@union-sport.ch',
           },
           data: {
             title: '2. Erhobene Daten',
@@ -93,12 +93,12 @@ export const de = {
       title: 'Was planst du?',
       birthday: 'Geburtstag', corporate: 'Firmen-Anlass', teambuilding: 'Teambuilding',
       tournament: 'Turnier', camp: 'Camp', school: 'Schule', court_only: 'Court-Only',
+      neon_padel: 'Neon Padel',
     },
     attendees: {
       title: 'Teilnehmer & Sport',
-      count: 'Personenzahl', ageGroup: 'Altersgruppe', level: 'Level',
-      ageGroups: { children: 'Kinder', teens: 'Jugend', adults: 'Erwachsene', mixed: 'Gemischt' },
-      levels: { beginner: 'Anfänger', intermediate: 'Fortgeschritten', advanced: 'Pro', mixed: 'Gemischt' },
+      count: 'Personenzahl', ageGroup: 'Altersgruppe',
+      ageGroups: { kids: 'Kinder / Schüler', adults: 'Erwachsene', mixed: 'Gemischt' },
       sports: 'Sportart(en)', courts: 'Courts',
       conflictTitle: 'Diese Kombination ist nicht möglich',
       conflictText: 'Deine gewählten Sportarten sind nicht alle am gleichen Standort verfügbar. Bitte passe die Auswahl an oder erstelle separate Anfragen pro Standort.',

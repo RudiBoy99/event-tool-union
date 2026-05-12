@@ -4,13 +4,10 @@ import { useEffect, useMemo } from 'react'
 import type { EventRequestData } from '../schema'
 import { StepShell } from '../components/StepShell'
 import { getAvailableLocations } from '../data/locations'
-import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { cn } from '@/lib/utils'
 import { useBrandTheme } from '../theme/BrandThemeContext'
 
-const AGES = ['children', 'teens', 'adults', 'mixed'] as const
-const LEVELS = ['beginner', 'intermediate', 'advanced', 'mixed'] as const
+const AGES = ['kids', 'adults', 'mixed'] as const
 
 const SPORT_COLORS: Record<string, string> = {
   padel:       '#3778F9',
@@ -40,15 +37,24 @@ interface Props { step: number; onBack: () => void; onNext: () => void }
 
 export function AttendeesSportStep({ step, onBack, onNext }: Props) {
   const { t } = useTranslation()
-  const { register, control, watch, setValue } = useFormContext<EventRequestData>()
+  const { control, watch, setValue } = useFormContext<EventRequestData>()
   const { setSports } = useBrandTheme()
   const sports = watch('sports')
+  const eventType = watch('eventType')
+  const isNeonPadel = eventType === 'neon_padel'
 
-  // Sport is selected BEFORE location — always show selectable sport families.
+  // Neon Padel läuft nur in Hafen mit Padel — alle anderen Sportarten ausblenden.
   const availableSports = useMemo(
-    () => ['padel', 'tennis', 'golf', 'pball'],
-    [],
+    () => (isNeonPadel ? ['padel'] : ['padel', 'tennis', 'golf', 'pball']),
+    [isNeonPadel],
   )
+
+  // Falls Neon Padel aktiv ist und Padel noch nicht gesetzt, automatisch setzen.
+  useEffect(() => {
+    if (isNeonPadel && !(sports ?? []).some((s) => s.sport === 'padel')) {
+      setValue('sports', [{ sport: 'padel', courts: 1 }])
+    }
+  }, [isNeonPadel, sports, setValue])
 
   // Update brand theme when sports selection changes
   useEffect(() => {
@@ -64,18 +70,19 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
   )
 
   const toggleSport = (sport: string) => {
+    // Padel ist bei Neon Padel gesperrt aktiv — Deselect ist nicht erlaubt.
+    if (isNeonPadel && sport === 'padel') return
     const current = sports ?? []
     const exists = current.find((s) => s.sport === sport)
     if (exists) {
       setValue('sports', current.filter((s) => s.sport !== sport))
     } else {
-      setValue('sports', [...current, { sport: sport as any, courts: 1 }])
+      const entry =
+        sport === 'golf'
+          ? { sport: 'golf' as const, courts: 1, golf: { drivingRange: 1, trackman: 0, puttingGreen: false } }
+          : { sport: sport as any, courts: 1 }
+      setValue('sports', [...current, entry])
     }
-  }
-
-  const updateCourts = (sport: string, courts: number) => {
-    const current = sports ?? []
-    setValue('sports', current.map((s) => (s.sport === sport ? { ...s, courts } : s)))
   }
 
   return (
@@ -83,16 +90,54 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
       <h1 className="display-xl text-3xl md:text-4xl mb-6">{t('steps.attendees.title')}</h1>
 
       {/* Attendee details */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-        <div>
-          <Label className="label-caps">{t('steps.attendees.count')}</Label>
-          <Input
-            type="number"
-            min={1}
-            {...register('attendees.count', { valueAsNumber: true })}
-            className="bg-white/5 border-white/15 text-white"
-          />
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+        <Controller
+          name="attendees.count"
+          control={control}
+          render={({ field }) => {
+            const current = typeof field.value === 'number' && Number.isFinite(field.value) ? field.value : 1
+            const set = (n: number) => field.onChange(Math.min(200, Math.max(1, n)))
+            return (
+              <div>
+                <Label className="label-caps">{t('steps.attendees.count')}</Label>
+                <div className="flex items-stretch mt-1 h-12 w-full max-w-[260px]">
+                  <button
+                    type="button"
+                    aria-label="−"
+                    onClick={() => set(current - 1)}
+                    className="w-12 flex items-center justify-center border border-white/15 border-r-0 text-white text-2xl leading-none select-none hover:bg-[var(--color-brand)] hover:text-black hover:border-[var(--color-brand)] active:scale-95 transition-all"
+                    style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    min={1}
+                    max={200}
+                    value={current}
+                    onChange={(e) => {
+                      const v = Number(e.target.value)
+                      if (Number.isFinite(v)) set(v)
+                    }}
+                    onFocus={(e) => e.currentTarget.select()}
+                    className="flex-1 min-w-0 bg-white/5 border-y border-white/15 text-center text-xl text-white focus:outline-none focus:bg-white/10 [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif', fontWeight: 900 }}
+                  />
+                  <button
+                    type="button"
+                    aria-label="+"
+                    onClick={() => set(current + 1)}
+                    className="w-12 flex items-center justify-center border border-white/15 border-l-0 text-white text-2xl leading-none select-none hover:bg-[var(--color-brand)] hover:text-black hover:border-[var(--color-brand)] active:scale-95 transition-all"
+                    style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            )
+          }}
+        />
         <Controller
           name="attendees.ageGroup"
           control={control}
@@ -111,28 +156,28 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
             </div>
           )}
         />
-        <Controller
-          name="attendees.level"
-          control={control}
-          render={({ field }) => (
-            <div>
-              <Label className="label-caps">{t('steps.attendees.level')}</Label>
-              <select
-                className="w-full bg-white/5 border border-white/15 px-3 py-2 text-sm text-white mt-1"
-                value={field.value}
-                onChange={(e) => field.onChange(e.target.value)}
-              >
-                {LEVELS.map((l) => (
-                  <option key={l} value={l} className="bg-black">{t(`steps.attendees.levels.${l}`)}</option>
-                ))}
-              </select>
-            </div>
-          )}
-        />
       </div>
 
       {/* Sport selection — large color cards */}
       <Label className="label-caps mb-4 block">{t('steps.attendees.sports')}</Label>
+      {isNeonPadel && (
+        <div
+          className="mb-4 p-3 border-l-4 text-xs"
+          style={{
+            background: 'rgba(255,30,180,0.08)',
+            borderColor: 'rgba(255,30,180,0.7)',
+            color: 'rgba(255,255,255,0.85)',
+          }}
+        >
+          <span
+            className="font-black uppercase tracking-wider mr-2"
+            style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif', color: 'rgba(255,80,200,1)' }}
+          >
+            Neon Padel
+          </span>
+          läuft ausschliesslich in <strong className="font-bold">Basel Hafen</strong> mit Padel.
+        </div>
+      )}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
         {availableSports.map((sport) => {
           const picked = sports?.find((s) => s.sport === sport)
@@ -205,30 +250,6 @@ export function AttendeesSportStep({ step, onBack, onNext }: Props) {
         </div>
       )}
 
-      {/* Courts input for selected sports */}
-      {(sports?.length ?? 0) > 0 && (
-        <div className="space-y-3">
-          {sports?.map((s) => (
-            <div key={s.sport} className="flex items-center gap-4">
-              <span
-                className="text-xs font-black uppercase tracking-wider flex-1"
-                style={{ fontFamily: 'Söhne Breit, Archivo Black, sans-serif' }}
-              >
-                {SPORT_LABELS[s.sport] ?? s.sport}
-              </span>
-              <Label className="label-caps">{t('steps.attendees.courts')}</Label>
-              <Input
-                type="number"
-                min={1}
-                max={10}
-                className={cn('w-20 bg-white/5 border-white/15 text-white')}
-                value={s.courts}
-                onChange={(e) => updateCourts(s.sport, Number(e.target.value))}
-              />
-            </div>
-          ))}
-        </div>
-      )}
     </StepShell>
   )
 }

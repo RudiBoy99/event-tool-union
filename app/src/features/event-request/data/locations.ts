@@ -6,7 +6,6 @@ export const LOCATIONS: Record<string, LocationInfo> = {
     name: 'Union Sport Münchenstein',
     sports: {
       padel_panorama: 5,
-      padel_single: 1,
       tennis_indoor: 5,
       tennis_outdoor: 2,
       golf_sim: 3,
@@ -25,7 +24,8 @@ export const LOCATIONS: Record<string, LocationInfo> = {
     id: 'wolf',
     name: 'Union PickleBall — Basel Wolf',
     sports: {
-      pball: 4,
+      pball: 5,
+      padel_single: 2,
       tabletennis: 4,
     },
   },
@@ -34,6 +34,8 @@ export const LOCATIONS: Record<string, LocationInfo> = {
 export type SportFamily = 'padel' | 'tennis' | 'golf' | 'pball' | 'tabletennis'
 
 export const SPORT_FAMILY_TO_LOCATIONS: Record<SportFamily, string[]> = {
+  // Padel-Events laufen nur in Hafen + Münchenstein. Die 2 Single Padel-Courts in Wolf
+  // sind interne Backup-Infrastruktur und werden nicht als Buchungs-Standort vorgeschlagen.
   padel: ['hafen', 'muenchenstein'],
   tennis: ['muenchenstein'],
   golf: ['muenchenstein'],

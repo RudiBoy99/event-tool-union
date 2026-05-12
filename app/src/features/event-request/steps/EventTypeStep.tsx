@@ -4,19 +4,31 @@ import type { EventRequestData } from '../schema'
 import { StepShell } from '../components/StepShell'
 import { cn } from '@/lib/utils'
 
+// Event-types that lock sport+location selection (Neon Padel only runs at Hafen with Padel).
+function applyEventTypeDefaults(
+  type: EventRequestData['eventType'],
+  setValue: (path: any, value: any) => void,
+) {
+  if (type === 'neon_padel') {
+    setValue('sports', [{ sport: 'padel', courts: 1 }])
+    setValue('location', 'hafen')
+  }
+}
+
 const TYPES = [
-  { id: 'birthday',   tagline: { de: 'Privat feiern',     en: 'Private party' } },
-  { id: 'corporate',  tagline: { de: 'Mit dem Team',      en: 'With the team' } },
-  { id: 'tournament', tagline: { de: 'Wettkampf-Modus',   en: 'Compete' } },
-  { id: 'school',     tagline: { de: 'Schul-Anlass',      en: 'School event' } },
-  { id: 'court_only', tagline: { de: 'Nur Court mieten',  en: 'Court rental only' } },
+  { id: 'birthday',    tagline: { de: 'Privat feiern',    en: 'Private party' } },
+  { id: 'corporate',   tagline: { de: 'Mit dem Team',     en: 'With the team' } },
+  { id: 'tournament',  tagline: { de: 'Wettkampf-Modus',  en: 'Compete' } },
+  { id: 'school',      tagline: { de: 'Schul-Anlass',     en: 'School event' } },
+  { id: 'court_only',  tagline: { de: 'Nur Court mieten', en: 'Court rental only' } },
+  { id: 'neon_padel',  tagline: { de: 'UV-Licht & Disco', en: 'UV lights & disco' } },
 ] as const
 
 interface Props { step: number; onBack: () => void; onNext: () => void }
 
 export function EventTypeStep({ step, onBack, onNext }: Props) {
   const { t, i18n } = useTranslation()
-  const { control, watch } = useFormContext<EventRequestData>()
+  const { control, watch, setValue } = useFormContext<EventRequestData>()
   const selected = watch('eventType')
   const lang = (i18n.language || 'de').startsWith('en') ? 'en' : 'de'
 
@@ -34,7 +46,10 @@ export function EventTypeStep({ step, onBack, onNext }: Props) {
               return (
                 <button
                   key={type.id}
-                  onClick={() => field.onChange(type.id)}
+                  onClick={() => {
+                    field.onChange(type.id)
+                    applyEventTypeDefaults(type.id, setValue)
+                  }}
                   className={cn(
                     'group relative text-left overflow-hidden transition-all duration-300',
                     'min-h-[140px] pl-5 pr-14 py-5 flex flex-col justify-between',

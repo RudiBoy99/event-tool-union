@@ -14,15 +14,22 @@ export const eventRequestSchema = z.object({
     startTime: z.string().regex(/^\d{2}:\d{2}$/, 'Startzeit erforderlich'),
     durationMinutes: z.number().int().positive(),
   }),
-  eventType: z.enum(['birthday', 'corporate', 'teambuilding', 'tournament', 'camp', 'school', 'court_only']),
+  eventType: z.enum(['birthday', 'corporate', 'teambuilding', 'tournament', 'camp', 'school', 'court_only', 'neon_padel']),
   attendees: z.object({
     count: z.number().int().min(1).max(200),
-    ageGroup: z.enum(['children', 'teens', 'adults', 'mixed']),
-    level: z.enum(['beginner', 'intermediate', 'advanced', 'mixed']),
+    ageGroup: z.enum(['kids', 'adults', 'mixed']),
   }),
   sports: z.array(z.object({
     sport: z.enum(['padel', 'tennis', 'golf', 'pball', 'tabletennis']),
     courts: z.number().int().min(1),
+    // Golf-spezifische Anlagenauswahl. Wird nur bei sport === 'golf' gesetzt.
+    // `courts` repräsentiert hier die Summe aus drivingRange + trackman + (puttingGreen ? 1 : 0)
+    // damit Downstream-Code (Verfügbarkeit, Anfrage-Mail) generisch bleibt.
+    golf: z.object({
+      drivingRange: z.number().int().min(0).max(5),  // 0–5 Abschläge
+      trackman: z.number().int().min(0).max(3),     // 0–3 Trackman-Simulatoren
+      puttingGreen: z.boolean(),                     // Putting Green ja/nein
+    }).optional(),
   })).min(1, 'Mindestens eine Sportart wählen'),
   gastro: z.object({
     bistro: z.boolean(),
@@ -55,7 +62,7 @@ export const emptyEventRequest: EventRequestData = {
   location: 'muenchenstein',
   dateTime: { date: '', startTime: '', durationMinutes: 120 },
   eventType: 'corporate',
-  attendees: { count: 10, ageGroup: 'adults', level: 'mixed' },
+  attendees: { count: 10, ageGroup: 'adults' },
   sports: [],
   gastro: { bistro: false, drinks: false, apero: false, foodtruck: false, externalCatering: false },
   rooms: { lounge: false, meetingRoom: false },
