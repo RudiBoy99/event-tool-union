@@ -26,7 +26,8 @@ Thumbs.db
 .vercel
 
 # Raw source assets (cuts are in app/public/videos)
-Bilder/
+/Bilder/
+/Videos/
 
 # Local design concept previews (not deployed)
 app/public/concepts.html

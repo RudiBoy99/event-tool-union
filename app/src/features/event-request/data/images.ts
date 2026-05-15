@@ -31,13 +31,16 @@ const vid = (slug: string, durationMs: number, tags?: string[]): MediaItem => ({
  */
 export const SPORT_MEDIA: Record<SportFamily, MediaItem[]> = {
   padel: [
-    // Bilder ins Video eingewoben, kein Neon-Mix mehr im normalen Padel-Pool.
-    vid('sports/padel/padel-02', 3000, ['action']),                  // Schmash WOW
-    vid('sports/padel/padel-07', 4000, ['action']),                  // Padel-Match Outdoor Sommerfest
-    img('/images/sports/padel/padel-02.webp', ['social']),           // Kinder mit Coach
-    vid('sports/padel/padel-01', 2000, ['court']),                   // Indoor-Sweep (gekürzt vor Title)
-    vid('sports/padel/padel-04', 2000, ['social']),                  // High-Five (gekürzt vor "GOOD"-Text)
-    vid('sports/padel/padel-03', 3000, ['social']),                  // Sneaker-Detail
+    // padel-02 (Schmash WOW) entfernt — KAP-Shirt Jump-Cut bei 1.7s
+    // padel-03 (Sneaker-Detail) entfernt — "Play"-Title-Bleed am Schluss
+    // padel-04 (High-Five) entfernt — Source-Material-Cut unfixbar
+    // padel-07 (Sommerfest) entfernt — Dancing→Match Jump-Cut bei 1.3s
+    // Pool ist jetzt 100% Single-Scene Play-Sequenzen, alternierend Outdoor/Indoor
+    vid('sports/padel/padel-08', 3400, ['action']),                  // Outdoor Smash Münchenstein (Glaswand + Strasse BG)
+    vid('sports/padel/padel-10', 2000, ['action']),                  // Indoor Serve Scene (2 Spieler + Ball-Machine)
+    vid('sports/padel/padel-09', 2300, ['action']),                  // Doppel-Match Outdoor (Mann am Netz)
+    vid('sports/padel/padel-01', 1500, ['court']),                   // Indoor-Sweep leere Courts (Establisher)
+    vid('sports/padel/padel-11', 2200, ['action']),                  // Indoor Drone Dive (Frau Stretch-Shot)
   ],
   golf: [
     // Halle-Video zuerst (User-Wunsch), dann Bilder dazwischen statt clustered am Ende
